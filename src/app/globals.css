@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+/*
+  Kind Logic Group design tokens. These are the exact values used by the AEO tool site
+  (aeo-report-site), which is the source of truth for the palette. Do not invent new hex values.
+  Navy = the institutional voice, gold = the one accent, cream/white = paper layers.
+  Text-safe variants (gold-text, coral-text) exist because brand gold/coral are too light for
+  small text on cream; use them for labels and small copy, use the brand values for fills.
+*/
+:root {
+  --navy: #0f2038;
+  --navy-2: #182c4a;
+  --ink: #222b38;
+  --slate: #5a6677;
+  --gold: #d49a3d;
+  --gold-deep: #b88028;
+  --gold-text: #7a5000;
+  --gold-tint: #f7e7ce;
+  --cream: #faf8f5;
+  --cream-2: #f4efeb;
+  --vellum: #e6dfd5;
+  --card: #ffffff;
+  --teal: #1a828a;
+  --teal-tint: #e6f4f5;
+  --teal-line: #bee3e5;
+  --coral: #e65a4b;
+  --coral-text: #b4382b;
+  --coral-tint: #fdf1f0;
+  --coral-line: #f9d3cf;
+  --burst: #f5be47;
+}
+
+@theme inline {
+  --color-navy: var(--navy);
+  --color-navy-2: var(--navy-2);
+  --color-ink: var(--ink);
+  --color-slate: var(--slate);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-gold-text: var(--gold-text);
+  --color-gold-tint: var(--gold-tint);
+  --color-cream: var(--cream);
+  --color-cream-2: var(--cream-2);
+  --color-vellum: var(--vellum);
+  --color-card: var(--card);
+  --color-teal: var(--teal);
+  --color-teal-tint: var(--teal-tint);
+  --color-teal-line: var(--teal-line);
+  --color-coral: var(--coral);
+  --color-coral-text: var(--coral-text);
+  --color-coral-tint: var(--coral-tint);
+  --color-coral-line: var(--coral-line);
+  --color-burst: var(--burst);
+
+  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-card: 0 2px 8px -2px rgba(15, 32, 56, 0.04), 0 1px 3px -1px rgba(15, 32, 56, 0.02);
+  --shadow-lift: 0 10px 24px -4px rgba(15, 32, 56, 0.08), 0 4px 8px -2px rgba(15, 32, 56, 0.03);
+  --shadow-sheet: 0 20px 38px -6px rgba(15, 32, 56, 0.12), 0 8px 16px -4px rgba(15, 32, 56, 0.04);
+}
+
+/* Base styles live in @layer base so Tailwind utilities can override them. */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    color: var(--navy);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--gold-tint);
+    color: var(--navy);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* Hero backdrop: soft gradient washes plus a faint drafting grid that nods to the compass mark.
+   Pure CSS, no images, no JS. */
+.hero-backdrop {
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(60% 55% at 85% 10%, rgba(212, 154, 61, 0.22), transparent 70%),
+    radial-gradient(45% 45% at 5% 95%, rgba(26, 130, 138, 0.14), transparent 70%),
+    radial-gradient(50% 40% at 60% 100%, rgba(247, 231, 206, 0.9), transparent 70%);
+}
+
+.drafting-grid {
+  background-image:
+    linear-gradient(to right, rgba(15, 32, 56, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 32, 56, 0.055) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, #000 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, #000 30%, transparent 100%);
+}
+
+/* Navy panels get a faint dot texture so large dark areas don't read flat. */
+.dot-texture {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.1px, transparent 1.1px);
+  background-size: 18px 18px;
+}
+
+/* Entrance motion. Elements start visible; only when JS runs and the browser prefers motion do
+   they get the pre-reveal state, so nothing is hidden for crawlers or for people without JS. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
