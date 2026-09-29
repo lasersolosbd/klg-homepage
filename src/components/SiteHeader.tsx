@@ -7,17 +7,19 @@ import { Logo } from "@/components/Logo";
 import { ButtonLink } from "@/components/Buttons";
 import { FREE_REPORT_URL, NAV_LINKS } from "@/lib/config";
 
+// Navy header on every page. On the homepage it merges into the navy hero so the top of the
+// site reads as one composition; on the cream subpages it is the title bar of the sheet.
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-vellum/80 bg-cream/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-5 py-3 sm:px-8">
-        <Logo />
+    <header className="sticky top-0 z-40 bg-navy text-white">
+      <div className="mx-auto flex max-w-[1240px] items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
+        <Logo dark />
 
-        <nav aria-label="Main" className="hidden items-center gap-7 text-[15px] font-semibold text-slate lg:flex">
+        <nav aria-label="Main" className="hidden items-center gap-8 text-[13px] font-bold uppercase tracking-[0.14em] text-white/70 lg:flex">
           {NAV_LINKS.map((l) => {
             const active = pathname === l.href;
             return (
@@ -25,7 +27,9 @@ export function SiteHeader() {
                 key={l.href}
                 href={l.href}
                 aria-current={active ? "page" : undefined}
-                className={`transition-colors hover:text-navy ${active ? "text-navy" : ""}`}
+                className={`relative py-1 transition-colors hover:text-white ${
+                  active ? "text-white after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:bg-gold" : ""
+                }`}
               >
                 {l.label}
               </Link>
@@ -46,23 +50,25 @@ export function SiteHeader() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-vellum bg-white text-navy lg:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-[3px] border border-white/30 text-white lg:hidden"
           >
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden>
               {open ? <path d="M6 6l12 12M18 6 6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
             </svg>
           </button>
         </div>
       </div>
+      {/* Ruler along the bottom edge of the header: the first appearance of the drafting motif. */}
+      <div className="tick-rule text-white/25" aria-hidden />
 
-      <div id="mobile-nav" hidden={!open} className="border-t border-vellum bg-cream lg:hidden">
-        <nav aria-label="Mobile" className="mx-auto flex max-w-[1200px] flex-col px-5 py-3 sm:px-8">
+      <div id="mobile-nav" hidden={!open} className="border-t border-white/10 bg-navy lg:hidden">
+        <nav aria-label="Mobile" className="mx-auto flex max-w-[1240px] flex-col px-5 py-3 sm:px-8">
           {NAV_LINKS.map((l) => (
             <Link
               key={l.href}
               href={l.href}
               onClick={close}
-              className="border-b border-vellum/70 py-3 text-base font-semibold text-navy last:border-b-0"
+              className="border-b border-white/10 py-3.5 text-[13px] font-bold uppercase tracking-[0.14em] text-white last:border-b-0"
             >
               {l.label}
             </Link>

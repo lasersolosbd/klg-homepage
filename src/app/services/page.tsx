@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ButtonLink } from "@/components/Buttons";
+import { Crosshair, Dimension, Pivot, SheetLabel, TickRule } from "@/components/Drafting";
 import { JsonLd } from "@/components/JsonLd";
 import { LastUpdated } from "@/components/LastUpdated";
 import { Reveal } from "@/components/Reveal";
-import { Cite, Container, Eyebrow, SectionHeading } from "@/components/Section";
+import { Cite, Container } from "@/components/Section";
 import {
   AEO_PRICE_PER_MONTH,
   AI_ENGINES,
@@ -25,7 +26,14 @@ export const metadata: Metadata = {
   openGraph: { title: TITLE, description: DESCRIPTION, url: "/services" },
 };
 
-function Block({
+const stages = [
+  ["#visibility", "01", "AI visibility"],
+  ["#policy", "02", "AI policy course"],
+  ["#retainer", "03", "The monthly habit"],
+  ["#assistants", "04", "AI assistants"],
+] as const;
+
+function Stage({
   id,
   step,
   kicker,
@@ -36,7 +44,9 @@ function Block({
   who,
   first,
   cta,
+  tone,
   aside,
+  last = false,
 }: {
   id: string;
   step: string;
@@ -48,47 +58,100 @@ function Block({
   who: string;
   first: string;
   cta: { label: string; href: string };
+  tone: "gold" | "teal" | "navy" | "muted";
   aside?: React.ReactNode;
+  last?: boolean;
 }) {
+  const muted = tone === "muted";
   return (
-    <Reveal as="article" className="scroll-mt-24 border-t border-vellum py-14 sm:py-20">
-      <div id={id} className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16">
-        <div>
-          <p className="font-display text-sm font-bold tracking-wide text-gold-text">{step}</p>
-          <Eyebrow>{kicker}</Eyebrow>
-          <h2 className="text-3xl font-semibold leading-[1.12] sm:text-4xl">{title}</h2>
-          <p className="mt-2 text-sm font-semibold text-slate">{price}</p>
-          <div className="mt-5 space-y-4 text-[17px] leading-8 text-ink">{intro}</div>
-          <div className="mt-7">
-            <ButtonLink href={cta.href}>{cta.label}</ButtonLink>
-          </div>
-        </div>
-        <div className="space-y-5">
-          <div className="rounded-2xl border border-vellum bg-white p-6 shadow-card">
-            <h3 className="font-sans text-[12px] font-bold uppercase tracking-[0.14em] text-gold-text">What you get</h3>
-            <ul className="mt-3 space-y-2.5 text-[15px] leading-7 text-ink">
-              {get.map((g) => (
-                <li key={g} className="flex gap-3">
-                  <span className="mt-[11px] h-1.5 w-1.5 shrink-0 rounded-full bg-gold" aria-hidden />
-                  <span>{g}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div className="rounded-2xl border border-vellum bg-cream-2/60 p-5">
-              <h3 className="font-sans text-[12px] font-bold uppercase tracking-[0.14em] text-gold-text">Who it&rsquo;s for</h3>
-              <p className="mt-2 text-[15px] leading-7 text-ink">{who}</p>
-            </div>
-            <div className="rounded-2xl border border-vellum bg-cream-2/60 p-5">
-              <h3 className="font-sans text-[12px] font-bold uppercase tracking-[0.14em] text-gold-text">First step</h3>
-              <p className="mt-2 text-[15px] leading-7 text-ink">{first}</p>
+    <Reveal as="article" className="relative scroll-mt-24 lg:grid lg:grid-cols-[72px_1fr] lg:gap-10">
+      {/* Rail */}
+      <div className="relative hidden lg:block" aria-hidden>
+        <Pivot tone={tone} dashed={muted} size={48} className="sticky top-28">
+          {step}
+        </Pivot>
+        {!last && <span className="absolute inset-y-0 left-6 w-px bg-navy/20" />}
+      </div>
+
+      <div id={id} className="relative border-t border-navy/20 py-14 lg:py-20">
+        <div className="relative grid gap-12 lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-7">
+            <p className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] text-gold-text">
+              <span className="lg:hidden">
+                <Pivot size={28} tone={tone} dashed={muted} className="text-[11px]">
+                  {step}
+                </Pivot>
+              </span>
+              <span className="whitespace-nowrap">Stage {step}</span>
+              <span className="h-px w-5 bg-navy/25" aria-hidden />
+              <span className={muted ? "text-slate" : tone === "teal" ? "text-teal" : ""}>{kicker}</span>
+            </p>
+            <h2 className="mt-5 max-w-[18ch] text-[34px] font-semibold leading-[1.05] sm:text-[44px]">{title}</h2>
+            <p className="mt-3 text-sm font-semibold tabular-nums text-slate">{price}</p>
+            <div className="mt-7 max-w-2xl space-y-4 text-[17px] leading-8 text-ink">{intro}</div>
+            <div className="mt-8">
+              <ButtonLink href={cta.href} variant={muted ? "secondary" : "primary"}>
+                {cta.label}
+              </ButtonLink>
             </div>
           </div>
-          {aside}
+
+          <div className="lg:col-span-5">
+            <div className="border-t border-navy/25 pt-5">
+              <h3 className="flex items-center gap-2 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-gold-text">
+                <Crosshair size={12} /> What you get
+              </h3>
+              <ul className="mt-4 space-y-3 text-[15px] leading-7 text-ink">
+                {get.map((g, i) => (
+                  <li key={g} className="grid grid-cols-[28px_1fr] gap-2">
+                    <span className="pt-0.5 font-display text-sm font-bold tabular-nums text-navy/50" aria-hidden>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span>{g}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="mt-8 grid gap-8 sm:grid-cols-2">
+              <div className="border-t border-navy/25 pt-5">
+                <h3 className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-gold-text">Who it&rsquo;s for</h3>
+                <p className="mt-3 text-[15px] leading-7 text-ink">{who}</p>
+              </div>
+              <div className="border-t border-navy/25 pt-5">
+                <h3 className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-gold-text">First step</h3>
+                <p className="mt-3 text-[15px] leading-7 text-ink">{first}</p>
+              </div>
+            </div>
+            {aside && <div className="mt-10">{aside}</div>}
+          </div>
         </div>
       </div>
     </Reveal>
+  );
+}
+
+function Figure({
+  figure,
+  label,
+  note,
+  cite,
+}: {
+  figure: string;
+  label: string;
+  note?: string;
+  cite: { source: string; url: string };
+}) {
+  return (
+    <figure className="relative border-l border-navy/25 pl-6">
+      <p className="font-display text-[64px] font-semibold leading-[0.9] text-navy">{figure}</p>
+      <Dimension className="mt-3 text-navy/70" align="left">
+        {label}
+      </Dimension>
+      {note && <p className="mt-3 text-[15px] leading-7 text-ink">{note}</p>}
+      <figcaption>
+        <Cite source={cite.source} url={cite.url} />
+      </figcaption>
+    </figure>
   );
 }
 
@@ -97,37 +160,46 @@ export default function ServicesPage() {
     <>
       <JsonLd data={webPageSchema({ path: "/services", name: TITLE, description: DESCRIPTION })} />
 
-      <section className="hero-backdrop">
-        <Container className="py-16 sm:py-20">
+      {/* Page head: sheet label, big title, and an index ruler of the four stages. */}
+      <section className="relative overflow-hidden">
+        <div className="blueprint-grid grid-fade pointer-events-none absolute inset-0" aria-hidden />
+        <Container className="relative pt-16 sm:pt-20">
           <Reveal>
-            <SectionHeading
-              eyebrow="How we help"
-              title="Three things you can run. One on the way."
-              lede="Each one is a thing your organization operates, not a recommendation you file. Here is what each includes, who it fits, and what to do first."
-            />
+            <SheetLabel index="S-01">How we help</SheetLabel>
+            <h1 className="mt-8 max-w-[14ch] text-[44px] font-semibold leading-[1.0] sm:text-[60px] lg:text-[76px]">
+              Three things you can run. <em className="italic text-gold-deep">One</em> on the way.
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-slate">
+              Each one is a thing your organization operates, not a recommendation you file. Here
+              is what each includes, who it fits, and what to do first.
+            </p>
           </Reveal>
-          <Reveal delay={100}>
-            <nav aria-label="On this page" className="mt-8 flex flex-wrap gap-2 text-sm font-semibold">
-              {[
-                ["#visibility", "01 AI visibility"],
-                ["#policy", "02 AI policy course"],
-                ["#retainer", "03 The monthly habit"],
-                ["#assistants", "04 AI assistants (soon)"],
-              ].map(([href, label]) => (
-                <a key={href} href={href} className="rounded-full border border-vellum bg-white px-4 py-2 text-navy hover:border-navy">
-                  {label}
-                </a>
-              ))}
+          <Reveal delay={100} className="mt-14">
+            <nav aria-label="On this page">
+              <TickRule className="text-navy/40" />
+              <ol className="grid grid-cols-2 gap-x-6 gap-y-4 pt-4 sm:grid-cols-4">
+                {stages.map(([href, n, label]) => (
+                  <li key={href}>
+                    <a href={href} className="group flex items-start gap-3 text-[14px] font-semibold text-navy">
+                      <span className="font-display text-sm font-bold tabular-nums text-gold-text">{n}</span>
+                      <span className="underline decoration-transparent underline-offset-4 transition-colors group-hover:decoration-gold">
+                        {label}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ol>
             </nav>
           </Reveal>
         </Container>
       </section>
 
-      <Container>
-        <Block
+      <Container className="mt-16">
+        <Stage
           id="visibility"
           step="01"
           kicker="Start here"
+          tone="gold"
           title="AI visibility for your organization"
           price={`${AEO_PRICE_PER_MONTH} per month, flat. Free first report.`}
           intro={
@@ -158,18 +230,20 @@ export default function ServicesPage() {
           first="Run the free report. It takes the same checks and shows the top fixes. If the answer is already good, you'll know, and you can stop there."
           cta={{ label: "See your score, free", href: FREE_REPORT_URL }}
           aside={
-            <div className="rounded-2xl border border-vellum bg-white p-5">
-              <p className="font-display text-4xl font-semibold text-navy">{STATS.aiOverviewClicks.figure}</p>
-              <p className="mt-2 text-[15px] leading-7 text-ink">{STATS.aiOverviewClicks.claim}</p>
-              <Cite source={STATS.aiOverviewClicks.sourceShort} url={STATS.aiOverviewClicks.url} />
-            </div>
+            <Figure
+              figure={STATS.aiOverviewClicks.figure}
+              label="fewer clicks to any website"
+              note="on Google searches where an AI Overview appears (2.4% vs. 3.8% click-through, Feb 2026)."
+              cite={{ source: STATS.aiOverviewClicks.sourceShort, url: STATS.aiOverviewClicks.url }}
+            />
           }
         />
 
-        <Block
+        <Stage
           id="policy"
           step="02"
           kicker="Governance, not a gadget"
+          tone="teal"
           title="AI policy, a guided course for your executive team and board"
           price="Priced per organization. Ask us."
           intro={
@@ -200,25 +274,27 @@ export default function ServicesPage() {
           first="Ask your staff which AI tools they used this week. Count. Then book a call and tell us the number; it shapes where the course starts."
           cta={{ label: "Ask about the course", href: BOOKING_URL }}
           aside={
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div className="rounded-2xl border border-vellum bg-white p-5">
-                <p className="font-display text-4xl font-semibold text-navy">{STATS.shadowAi.figure}</p>
-                <p className="mt-2 text-[15px] leading-7 text-ink">{STATS.shadowAi.claim}</p>
-                <Cite source={STATS.shadowAi.sourceShort} url={STATS.shadowAi.url} />
-              </div>
-              <div className="rounded-2xl border border-coral-line bg-coral-tint p-5">
-                <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-coral-text">Funders are asking</p>
-                <p className="mt-2 text-[15px] leading-7 text-ink">{STATS.gatesRequirement.claim}</p>
+            <div className="grid gap-10 sm:grid-cols-2 sm:gap-8">
+              <Figure
+                figure={STATS.shadowAi.figure}
+                label="use unapproved AI tools"
+                note="of nonprofit staff and executives, by their own report."
+                cite={{ source: STATS.shadowAi.sourceShort, url: STATS.shadowAi.url }}
+              />
+              <blockquote className="border-l-2 border-coral pl-5">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-coral-text">Funders are asking</p>
+                <p className="mt-3 text-[15px] leading-7 text-ink">{STATS.gatesRequirement.claim}</p>
                 <Cite source={STATS.gatesRequirement.sourceShort} url={STATS.gatesRequirement.url} />
-              </div>
+              </blockquote>
             </div>
           }
         />
 
-        <Block
+        <Stage
           id="retainer"
           step="03"
           kicker="The monthly habit"
+          tone="navy"
           title="Keep the visibility going"
           price={`Included in the ${AEO_PRICE_PER_MONTH} per month.`}
           intro={
@@ -246,10 +322,12 @@ export default function ServicesPage() {
           cta={{ label: "See pricing", href: "/pricing" }}
         />
 
-        <Block
+        <Stage
           id="assistants"
           step="04"
           kicker="Coming soon"
+          tone="muted"
+          last
           title="AI assistants for the work that isn't the mission"
           price="On the roadmap. Not for sale yet."
           intro={
@@ -276,42 +354,40 @@ export default function ServicesPage() {
           who="Organizations already running the visibility service or the policy course, with one or two clear, repetitive processes they'd like off a human's desk."
           first="Write down the three most repetitive tasks in your office and roughly how many hours a week they eat. Send us the list. That's the whole application."
           cta={{ label: "Get on the early list", href: `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("AI assistants early list")}` }}
-          aside={
-            <div className="rounded-2xl border border-vellum bg-white p-5">
-              <Cite source={STATS.randFailure.source} url={STATS.randFailure.url} />
-            </div>
-          }
+          aside={<Cite source={STATS.randFailure.source} url={STATS.randFailure.url} />}
         />
       </Container>
 
-      <section className="border-t border-vellum bg-white">
-        <Container className="py-14 sm:py-20">
+      <section className="relative mt-8 bg-navy text-white">
+        <TickRule className="text-white/30" />
+        <div className="blueprint-grid-light grid-fade pointer-events-none absolute inset-0" aria-hidden />
+        <Container className="relative py-16 lg:py-20">
           <Reveal>
-            <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
-              <div className="max-w-2xl">
-                <h2 className="text-3xl font-semibold leading-tight">Not sure which one you need?</h2>
-                <p className="mt-3 text-lg leading-8 text-slate">
+            <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-8">
+              <div className="lg:col-span-7">
+                <h2 className="text-[34px] font-semibold leading-tight text-white sm:text-[44px]">Not sure which one you need?</h2>
+                <p className="mt-4 max-w-2xl text-lg leading-8 text-white/75">
                   Most organizations start with the free report because it costs nothing and tells
                   you something true. If the policy question is more urgent, say so on the call and
                   we&rsquo;ll start there.
                 </p>
-                <LastUpdated className="mt-4" />
+                <p className="mt-6 text-sm text-white/55">
+                  Wondering what the check looks like from the inside?{" "}
+                  <Link href="/about#our-own-checks" className="font-semibold text-white underline decoration-gold underline-offset-4">
+                    This site is held to the same nine checks
+                  </Link>
+                  .
+                </p>
               </div>
-              <div className="flex flex-col gap-3 sm:flex-row">
+              <div className="flex flex-col gap-3 sm:flex-row lg:col-span-5 lg:justify-end">
                 <ButtonLink href={FREE_REPORT_URL}>See your AI visibility score</ButtonLink>
-                <ButtonLink href={BOOKING_URL} variant="secondary">
+                <ButtonLink href={BOOKING_URL} variant="outline-light">
                   Book a 30-minute call
                 </ButtonLink>
               </div>
             </div>
+            <LastUpdated className="mt-10 !text-white/45" />
           </Reveal>
-          <p className="mt-8 text-sm text-slate">
-            Wondering what the check looks like from the inside?{" "}
-            <Link href="/about" className="font-semibold text-navy underline underline-offset-4">
-              This site is held to the same nine checks
-            </Link>
-            .
-          </p>
         </Container>
       </section>
     </>

@@ -181,3 +181,155 @@ override. Nothing here is precious; every item says where to change it.
 - aeo-report-site, aeo-client-dashboard and klg-reports were read for tokens only; nothing
   in them was changed.
 - `main` in this repo is untouched; all work is on `build/homepage-v1`.
+
+---
+
+# v2 redesign — visual/structural rebuild (September 29, 2026)
+
+Mark's review of v1: *"It looks like every other website you have created. There is no
+creativity or uniqueness to this site."* This pass rebuilds the composition and gives KLG a
+visual signature. Business content, voice, service ladder, stats, palette, fonts, and the
+AEO/SEO technical work from v1 are carried forward unchanged unless noted. Branch
+`redesign/homepage-v2` from `build/homepage-v1` at `cddba0f`; PR #1 (v1) is untouched.
+
+## The signature: a drafting sheet
+
+42. **The compass/protractor in the logo became the site's graphic system, not a mascot.**
+    `src/components/Drafting.tsx` is a small kit of monochrome hairline pieces that take
+    their colour from `currentColor` so they read on navy and on cream:
+    - `SheetLabel` — the recurring section marker ("⌖ 02 — WHAT CHANGED ————") sitting on a
+      hairline that runs to the container edge. This replaces the uppercase pill eyebrow on
+      every section of every page. Subpages use sheet prefixes (S-01, A-02, P-01, C-01).
+    - `Dimension` — a `|<—— label ——>|` dimension line. Every large statistic on the site is
+      annotated with one instead of being boxed: 98% and 7% on the homepage, ~37% in the
+      What-changed section, $579 on Pricing, 37%/53% on Services.
+    - `Pivot` — the compass pivot (double ring, centre dot) used as the numbered node on plan
+      rails and step lists.
+    - `Crosshair` — registration mark on labels and column heads.
+    - `TickRule` (CSS `.tick-rule`) — a ruler with minor/major ticks; it is the bottom edge of
+      the header, the top edge of the footer, the top of the hero's engine strip, and the
+      divider before Why-now, before the About story, and above the Pricing columns. Section
+      boundaries are drawn with it instead of only with a colour swap.
+    - `ArcSweep` — a quarter-circle protractor with graduated ticks and concentric arcs,
+      sweeping from the bottom-right corner. Hero backdrop (gold on navy), closing CTA and
+      About/404 (navy hairline on cream), and the OG image.
+    - `Scale` — a labeled ruler with a highlighted range; Who-we-serve draws $1M–$30M as a
+      literal measurement on a $0–$40M scale.
+    - `CornerMarks` — four L-shaped registration brackets, used on the service "sheet," the
+      overhanging 7% figure, the logo on About, and the readiness inspection list.
+    - `.blueprint-grid` — 24px minor / 120px major grid, at an opacity that is actually
+      visible (v1's was not), faded at the edges so it reads as a sheet, not wallpaper.
+43. **Playfair numerals switched to lining figures** (`font-variant-numeric: lining-nums`
+    on headings and `.font-display`). Playfair's default old-style 3/7/9 descend below the
+    baseline and collided with the dimension lines under big numbers. This also makes "$1M
+    to $30M" sit level in headings.
+
+## Hero: which option and why
+
+44. **Chosen: full-bleed navy sheet with the headline as the dominant graphic, plus the
+    stat as an annotated figure.** Of the three options in the redesign brief, the diagonal
+    split was rejected (it fights the drafting-line geometry) and a cream hero was rejected
+    because the header/hero pair reads as one confident dark block, which is the
+    tech-forward feel Mark pointed at. Composition: sheet label → h1 at
+    `clamp(2.9rem, 7.6vw, 6.6rem)` spanning ~10 of 12 columns with "your name?" in italic
+    gold → a 12-column row with subhead + CTAs on the left six and the 98% figure on the
+    right five, sitting in front of the gold protractor arc. The 53%/22% sub-figures are
+    hairline-ruled, not boxed. Copy is v1's; the corrected stat framing (98 / 53 shadow AI
+    / 22 formal plan) is carried forward; "61% use it officially" does not appear anywhere.
+45. **The "we check" engine list is a white ruler strip that straddles the hero/next-section
+    boundary** (absolute, `translate-y-1/2`). This is the first band-break on the page; the
+    section below carries extra top padding to receive it. On phones it wraps to two or
+    three rows and the padding absorbs that.
+46. **The header is navy on every page** with a tick rule along its bottom edge. On the
+    homepage it merges into the hero; on cream subpages it is the sheet's title bar. The
+    wordmark is now set the way the logo sets it (uppercase, tracked serif).
+
+## Breaking the card-grid reflex
+
+47. **Service ladder → a stair-stepped plan rail on an inset drafting sheet.** The four
+    stages are an `<ol>` on a white sheet with a visible blueprint grid, corner marks, and
+    a drawing-style title block ("Sheet 03 of 07 / Scale 1:1 / Drawn for nonprofits" —
+    hidden on phones where it crowds). Each stage is a `Pivot` node on a vertical hairline;
+    each successive stage is indented 64px further and connected by an elbow, so the plan
+    literally steps down the sheet. Stage 01 is the gold node with the only solid button;
+    02 is teal; 03 navy; 04 a dashed muted node (coming soon). A hairline outline numeral
+    (`.outline-numeral`) sits in the empty right column at ≥1280px. The sheet bleeds to the
+    left viewport edge (`.bleed-left`).
+48. **Friction, audience and principles are hairline-divided columns or ledgers, not
+    cards.** Friction: three columns divided by vertical hairlines with a crosshair label.
+    Audience: three columns under a single top rule. Why-KLG principles and About's
+    how-we-work: numbered ledgers with row hairlines on navy. Pricing's three offers: one
+    top rule each in a different weight (gold solid / teal solid / dashed muted) instead of
+    three matching bordered cards. Services' "what you get / who / first step" are ruled
+    columns with two-digit indices instead of bordered boxes.
+49. **The one remaining boxed treatment varies each time it appears:** the readiness
+    "inspection sheet" on About (square, hairline border, corner marks, PASS / N/A stamps in
+    a status column), the overhanging 7% figure (gold top rule only), and the ruler strip
+    (tick rule on top). None use `rounded-2xl` + soft shadow.
+50. **Asymmetric splits:** What-changed runs a 6/6 split where the ~37% figure bleeds to the
+    right viewport edge (`.bleed-right`); Why-now is 5/6 with an offset start column; About's
+    story is 4/7 with a gap column; Contact is a 6/6 split where the navy "what happens on
+    the call" panel bleeds to the right viewport edge and, on phones, full width.
+    `.bleed-*` use `calc(-1 * max(2rem, (100vw - 1240px)/2 + 2rem))`; `body` has
+    `overflow-x: clip` so the scrollbar-width overshoot of `100vw` never causes a horizontal
+    scrollbar (verified `scrollWidth === viewport` on every page at 1440 and 390).
+
+## Breaking the alternating-band rhythm
+
+51. **Homepage band order is now:** navy hero (with the ruler strip crossing its bottom
+    edge) → a long cream stretch holding What-changed *and* the ladder sheet, separated by
+    the sheet itself rather than a colour band → a navy Why-KLG panel whose 7% figure hangs
+    over its bottom edge into the next section (the container has `pb-px` so the negative
+    margin can't collapse through it) → cream Who-we-serve → Why-now, separated from it by
+    a tick rule, not a background change → the closing CTA on cream-2 with the arc → navy
+    footer. Two cream sections in a row, one navy panel with an overhang, and three light
+    sections in a row with different dividers. Section heights vary deliberately.
+52. **Section headings vary in scale** (`SectionHeading size`), and the hero and closing CTA
+    run larger than the middle sections so the page has a start and an end.
+
+## Copy adjustments (only where layout required)
+
+53. The friction items gained "Friction 01/02/03" indices; the audience roles are set as
+    tracked small caps; the "Not sure you fit?" box became a sentence with an inline link.
+    The 37% figure's claim was split into label ("fewer clicks to any website") and
+    supporting sentence so it could take a dimension line. About's three stats moved out of
+    the prose into a ruled row of measurements, with the "close that gap" sentence kept
+    after them. Pricing gained one clarifying line that stage 03 is the monthly part of
+    stage 01, since the columns are numbered 01/02/04. Nothing else changed.
+54. **Footer and Contact show Longmont's coordinates** (40.17° N, 105.10° W) as a drafting
+    flourish, `aria-hidden`, next to the plain-text "Longmont, Colorado" the readiness
+    check needs. Remove `HOME_COORDINATES` in `src/lib/config.ts` if it feels precious.
+
+## Logo
+
+55. On About the logo now sits directly on the cream sheet with `mix-blend-multiply` and
+    registration corner marks ("Fig. 1 — the mark") instead of in a white rounded card. The
+    green-clash note from v1 (item 26) still stands and is, if anything, slightly more
+    visible now that the mark sits on the grid; nothing about the logo was redrawn.
+
+## AEO/SEO — nothing regressed
+
+56. Verified after the rebuild: `robots.txt` still allows all 15 named crawlers; every page
+    still sets one canonical; the homepage `<title>` is unchanged; `LAST_UPDATED` still
+    feeds the visible line, `article:modified_time`, JSON-LD `dateModified` and the
+    sitemap; the About page still states mission and service area in its first paragraph;
+    "Longmont, Colorado" is in the footer text of every page; nonprofit status remains N/A
+    and is shown as such; Organization/WebSite/WebPage JSON-LD is unchanged. All routes
+    still prerender as static HTML; the only client components are still the header and
+    the reveal observer. Decorative SVG is `aria-hidden`; the scale has an `aria-label`.
+    `npm run build` and `npm run lint` pass clean.
+
+## Screenshots
+
+57. Full-page screenshots of every page at 1440px and 390px, plus a hero crop, are committed
+    under `docs/screenshots/` (JPEG, downscaled) so the PR can be reviewed without pulling
+    the branch. Regenerate with Playwright against `next start` if the design changes; delete
+    the folder before go-live if it shouldn't ship with the repo (it is not served by Next).
+
+## Not done, on purpose (v2)
+
+- No 3D/WebGL, no canvas, no scroll-jacking. Motion is still the v1 fade/rise reveal plus a
+  line-draw variant (`.reveal-line`) that is available but used sparingly.
+- No new colours. Every hex value is the v1/aeo-report-site token set.
+- No new copy claims, prices, testimonials or logos.
+- PR #1 and `build/homepage-v1` untouched.

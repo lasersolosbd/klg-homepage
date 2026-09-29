@@ -36,6 +36,8 @@ export const HOME_STATE = "Colorado";
 export const SERVICE_AREA = "Colorado's Front Range";
 export const SERVICE_AREA_LONG =
   "Based in Longmont, Colorado. Working with nonprofits along the Front Range in person and across the United States remotely.";
+// Longmont's coordinates, shown in the footer as a drafting-sheet flourish (decorative, aria-hidden).
+export const HOME_COORDINATES = "40.17° N, 105.10° W";
 
 // Who the firm is for, said the same way everywhere.
 export const AUDIENCE = "nonprofits raising $1M–$30M a year";

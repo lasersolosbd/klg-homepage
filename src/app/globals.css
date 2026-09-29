@@ -81,8 +81,15 @@
   h4 {
     font-family: var(--font-display);
     color: var(--navy);
-    letter-spacing: -0.015em;
+    letter-spacing: -0.02em;
     text-wrap: balance;
+    /* Playfair's default figures are old-style (3, 7, 9 descend). Lining figures keep large
+       numerals on the baseline so dimension lines can sit under them. */
+    font-variant-numeric: lining-nums;
+  }
+
+  .font-display {
+    font-variant-numeric: lining-nums;
   }
 
   p {
@@ -95,39 +102,80 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--navy);
-    outline-offset: 2px;
-    border-radius: 4px;
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 }
 
-/* Hero backdrop: soft gradient washes plus a faint drafting grid that nods to the compass mark.
-   Pure CSS, no images, no JS. */
-.hero-backdrop {
-  background-color: var(--cream);
-  background-image:
-    radial-gradient(60% 55% at 85% 10%, rgba(212, 154, 61, 0.22), transparent 70%),
-    radial-gradient(45% 45% at 5% 95%, rgba(26, 130, 138, 0.14), transparent 70%),
-    radial-gradient(50% 40% at 60% 100%, rgba(247, 231, 206, 0.9), transparent 70%);
-}
+/* ── Drafting-sheet surfaces ──────────────────────────────────────────────────────────────── */
 
-.drafting-grid {
+/* Blueprint grid: a 24px minor grid with a 120px major grid. Unlike v1 this is meant to be
+   seen; it is the "sheet" the plan is drawn on. Dark variant for cream, light for navy. */
+.blueprint-grid {
   background-image:
+    linear-gradient(to right, rgba(15, 32, 56, 0.13) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 32, 56, 0.13) 1px, transparent 1px),
     linear-gradient(to right, rgba(15, 32, 56, 0.055) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(15, 32, 56, 0.055) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, #000 30%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, #000 30%, transparent 100%);
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  background-position: -1px -1px;
 }
 
-/* Navy panels get a faint dot texture so large dark areas don't read flat. */
-.dot-texture {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.1px, transparent 1.1px);
-  background-size: 18px 18px;
+.blueprint-grid-light {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.11) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.11) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  background-position: -1px -1px;
 }
 
-/* Entrance motion. Elements start visible; only when JS runs and the browser prefers motion do
-   they get the pre-reveal state, so nothing is hidden for crawlers or for people without JS. */
+/* Fades a grid out toward the edges so it reads as a sheet, not wallpaper. */
+.grid-fade {
+  mask-image: radial-gradient(ellipse 85% 80% at 50% 45%, #000 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 85% 80% at 50% 45%, #000 40%, transparent 100%);
+}
+
+/* Tick rule: a ruler. Baseline plus minor ticks every 10px and major ticks every 50px.
+   Colour comes from `color`, so `text-navy/40` or `text-white/50` sets it. */
+.tick-rule {
+  height: 12px;
+  background-image:
+    linear-gradient(currentColor, currentColor),
+    repeating-linear-gradient(to right, currentColor 0 1px, transparent 1px 10px),
+    repeating-linear-gradient(to right, currentColor 0 1px, transparent 1px 50px);
+  background-size:
+    100% 1px,
+    100% 5px,
+    100% 12px;
+  background-position: bottom left;
+  background-repeat: no-repeat;
+}
+
+/* Hairline text stroke for the giant "ghost" numerals behind plan stages. */
+.outline-numeral {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(15, 32, 56, 0.22);
+}
+
+.outline-numeral-light {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.28);
+}
+
+/* ── Entrance motion ─────────────────────────────────────────────────────────────────────── */
+/* Elements start visible; only when JS runs and the browser prefers motion do they get the
+   pre-reveal state, so nothing is hidden for crawlers or for people without JS. */
 @media (prefers-reduced-motion: no-preference) {
   .js .reveal {
     opacity: 0;
@@ -140,5 +188,31 @@
   .js .reveal.is-visible {
     opacity: 1;
     transform: none;
+  }
+
+  /* Lines draw in from the left instead of fading. */
+  .js .reveal-line {
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .js .reveal-line.is-visible {
+    transform: none;
+  }
+}
+
+/* ── Bleeds ──────────────────────────────────────────────────────────────────────────────── */
+/* Lets one element in a Container run to the viewport edge. body clips the scrollbar-width
+   overshoot of 100vw so no horizontal scrollbar appears. */
+body {
+  overflow-x: clip;
+}
+@media (min-width: 1024px) {
+  .bleed-right {
+    margin-right: calc(-1 * max(2rem, (100vw - 1240px) / 2 + 2rem));
+  }
+  .bleed-left {
+    margin-left: calc(-1 * max(2rem, (100vw - 1240px) / 2 + 2rem));
   }
 }

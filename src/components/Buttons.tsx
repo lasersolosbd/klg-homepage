@@ -1,16 +1,18 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-type Variant = "primary" | "secondary" | "ghost" | "inverse";
+type Variant = "primary" | "secondary" | "ghost" | "inverse" | "outline-light";
 
+// Squared-off buttons with a tracked label: closer to a drawing's title block than a SaaS pill.
 const base =
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl px-5 text-[15px] font-semibold transition-all duration-200 active:translate-y-px";
-const sizes = { md: "h-11", lg: "h-13 px-6 text-base" } as const;
+  "group inline-flex items-center justify-center gap-2.5 whitespace-nowrap rounded-[3px] px-5 text-[14px] font-bold tracking-[0.02em] transition-all duration-200 active:translate-y-px";
+const sizes = { md: "h-11", lg: "h-13 px-6 text-[15px]" } as const;
 const variants: Record<Variant, string> = {
-  primary: "bg-gold text-navy shadow-card hover:bg-gold-deep hover:shadow-lift",
-  secondary: "border border-navy/20 bg-white text-navy hover:border-navy hover:bg-cream-2",
-  ghost: "text-navy underline-offset-4 hover:underline",
+  primary: "bg-gold text-navy hover:bg-gold-deep",
+  secondary: "border border-navy/30 bg-transparent text-navy hover:border-navy hover:bg-navy hover:text-white",
+  ghost: "px-1 text-navy underline decoration-gold/70 decoration-1 underline-offset-[6px] hover:decoration-gold-deep hover:decoration-2",
   inverse: "bg-white text-navy hover:bg-gold-tint",
+  "outline-light": "border border-white/40 text-white hover:border-white hover:bg-white hover:text-navy",
 };
 
 export function ButtonLink({
@@ -46,10 +48,10 @@ export function ButtonLink({
   );
 }
 
-export function ArrowIcon({ className = "h-4 w-4" }: { className?: string }) {
+export function ArrowIcon({ className = "h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden>
-      <path d="M4 10h11m0 0-4-4m4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3 10h13m0 0-4.5-4.5M16 10l-4.5 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

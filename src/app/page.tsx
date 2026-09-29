@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ButtonLink } from "@/components/Buttons";
+import { ArcSweep, CornerMarks, Crosshair, Dimension, Pivot, Scale, SheetLabel, TickRule } from "@/components/Drafting";
 import { JsonLd } from "@/components/JsonLd";
 import { Reveal } from "@/components/Reveal";
-import { Cite, Container, Eyebrow, SectionHeading } from "@/components/Section";
+import { Cite, Container, SectionHeading } from "@/components/Section";
 import {
   AEO_PRICE_PER_MONTH,
   AI_ENGINES,
@@ -44,7 +45,7 @@ const ladder = [
     price: `Included in the ${AEO_PRICE_PER_MONTH}/month`,
     body: "AI answers change every week. Something you fixed in March can quietly slide by August because a competitor published a better page. The visibility service is not a one-time audit. It is the monthly check that catches the slide, with a to-do list short enough to actually get done.",
     cta: { label: "How the monthly report works", href: "/services#visibility" },
-    tone: "gold",
+    tone: "navy",
   },
   {
     step: "04",
@@ -56,6 +57,9 @@ const ladder = [
     tone: "muted",
   },
 ] as const;
+
+// Stair-step indents for the plan rail, one static class per stage so Tailwind can see them.
+const indent = ["lg:pl-0", "lg:pl-16", "lg:pl-32", "lg:pl-48"] as const;
 
 const friction = [
   {
@@ -70,6 +74,25 @@ const friction = [
   {
     title: "Every hour of admin is an hour off the mission.",
     body: "The acknowledgment letters, the board packet, the phone that rings at 5:40 p.m. Those hours are paid for with donor dollars. Some of them can be given back.",
+  },
+] as const;
+
+const principles = [
+  {
+    t: "Plain English or it doesn't ship.",
+    b: "Every report, every policy draft, every email is written for a busy executive director, not for the IT person you don't have.",
+  },
+  {
+    t: "Built for the $1M–$30M range.",
+    b: "Big enough to have a development director. Not big enough to have a technology department. That's the organization we design for, and the only one.",
+  },
+  {
+    t: "One flat price on the thing we can price.",
+    b: `The visibility service is ${AEO_PRICE_PER_MONTH} a month, same for everyone. No tiers, no seats, no surprise line items. The rest is scoped with you, in writing, before any work starts.`,
+  },
+  {
+    t: "A plan people actually follow.",
+    b: "Twenty-two years in the Navy teaches you that the best plan is the one the crew can run at 2 a.m. without the person who wrote it. That is the standard for everything we hand you.",
   },
 ] as const;
 
@@ -115,88 +138,108 @@ export default function HomePage() {
         })}
       />
 
-      {/* ── Hero ─────────────────────────────────────────────────────────────── */}
-      <section className="hero-backdrop relative overflow-hidden">
-        <div className="drafting-grid pointer-events-none absolute inset-0" aria-hidden />
-        <Container className="relative grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:py-28">
-          <div>
-            <Reveal>
-              <Eyebrow>AI for nonprofits raising $1M–$30M a year</Eyebrow>
-            </Reveal>
-            <Reveal delay={80}>
-              <h1 className="text-[40px] font-semibold leading-[1.06] sm:text-5xl lg:text-[64px]">
-                Somebody just asked an AI which nonprofit to support. Did it say your name?
-              </h1>
-            </Reveal>
-            <Reveal delay={160}>
-              <p className="mt-6 max-w-xl text-lg leading-8 text-slate sm:text-xl sm:leading-9">
+      {/* ── Hero: full-bleed navy sheet, headline as the graphic, stat as an annotated figure ── */}
+      <section className="relative bg-navy text-white">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+          <div className="blueprint-grid-light grid-fade absolute inset-0" />
+          <div className="absolute inset-y-0 right-0 w-2/3 bg-[radial-gradient(ellipse_at_100%_100%,rgba(212,154,61,0.16),transparent_60%)]" />
+          <ArcSweep className="absolute -bottom-10 -right-10 h-[115%] w-auto max-w-none text-gold" strokeOpacity={0.32} />
+        </div>
+
+        <Container className="relative pb-24 pt-14 sm:pt-20 lg:pb-32 lg:pt-24">
+          <Reveal>
+            <SheetLabel index="01" tone="light">
+              For nonprofits raising $1M–$30M a year
+            </SheetLabel>
+          </Reveal>
+
+          <Reveal delay={80}>
+            <h1 className="mt-10 max-w-[13.5ch] text-[clamp(2.9rem,7.6vw,6.6rem)] font-semibold leading-[0.98] text-white">
+              Somebody just asked an AI which nonprofit to support. Did it say{" "}
+              <em className="italic text-gold">your name?</em>
+            </h1>
+          </Reveal>
+
+          <div className="mt-12 grid gap-14 lg:mt-16 lg:grid-cols-12 lg:gap-8">
+            <Reveal delay={160} className="lg:col-span-6">
+              <p className="max-w-xl text-lg leading-8 text-white/75 sm:text-xl sm:leading-9">
                 Kind Logic Group helps nonprofits get found in AI answers, write an AI policy the
                 board will actually sign, and, soon, hand the busywork to assistants so more of
                 every dollar raised reaches the mission.
               </p>
-            </Reveal>
-            <Reveal delay={240}>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <ButtonLink href={FREE_REPORT_URL} size="lg">
                   See your AI visibility score
                 </ButtonLink>
-                <ButtonLink href={BOOKING_URL} variant="secondary" size="lg">
+                <ButtonLink href={BOOKING_URL} variant="outline-light" size="lg">
                   Book a 30-minute call
                 </ButtonLink>
               </div>
-              <p className="mt-4 text-sm text-slate">
+              <p className="mt-4 text-sm text-white/55">
                 The score is free, and you can read it without talking to anyone first.
               </p>
             </Reveal>
-            <Reveal delay={320}>
-              <ul className="mt-10 flex flex-wrap items-center gap-x-2 gap-y-2 text-[13px] font-medium text-slate" aria-label="AI tools we check">
-                <li className="mr-1 text-[12px] font-bold uppercase tracking-[0.12em] text-gold-text">We check</li>
-                {AI_ENGINES.map((e) => (
-                  <li key={e} className="rounded-full border border-vellum bg-white/70 px-3 py-1">
-                    {e}
-                  </li>
-                ))}
+
+            {/* The stat is a measurement on the sheet, not a card. */}
+            <Reveal delay={240} as="figure" className="lg:col-span-5 lg:col-start-8">
+              <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-gold">
+                <Crosshair size={12} /> The sector, this month
+              </p>
+              <p className="mt-3 font-display text-[clamp(6rem,12vw,10.5rem)] font-semibold leading-[0.9] text-white">
+                98<span className="align-top text-[0.5em] leading-none text-gold">%</span>
+              </p>
+              <Dimension className="mt-3 text-gold" align="left">
+                of nonprofits already use AI
+              </Dimension>
+              <ul className="mt-8 grid grid-cols-2 gap-6">
+                <li className="border-l border-white/30 pl-4">
+                  <p className="font-display text-4xl font-semibold text-white">{STATS.shadowAi.figure}</p>
+                  <p className="mt-1 text-sm leading-5 text-white/70">use tools nobody approved</p>
+                </li>
+                <li className="border-l border-white/30 pl-4">
+                  <p className="font-display text-4xl font-semibold text-white">22%</p>
+                  <p className="mt-1 text-sm leading-5 text-white/70">have a formal AI risk plan</p>
+                </li>
               </ul>
+              <figcaption className="mt-6 text-xs leading-5 text-white/50">
+                {STATS.adoptionVsGovernance.source}.{" "}
+                <a href={STATS.adoptionVsGovernance.url} target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-white">
+                  Read it
+                </a>
+              </figcaption>
             </Reveal>
           </div>
 
-          <Reveal delay={200} as="figure" className="lg:justify-self-end">
-            <div className="relative w-full max-w-md rounded-3xl bg-navy p-7 text-white shadow-sheet sm:p-9">
-              <div className="dot-texture pointer-events-none absolute inset-0 rounded-3xl" aria-hidden />
-              <div className="relative">
-                <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-gold">The sector, this month</p>
-                <p className="mt-4 font-display text-[88px] font-semibold leading-none text-white sm:text-[104px]">
-                  {STATS.adoptionVsGovernance.figure}
-                </p>
-                <p className="mt-2 text-lg leading-7 text-white/90">of nonprofits already use AI in some way.</p>
-                <div className="mt-6 grid grid-cols-2 gap-4 border-t border-white/15 pt-6">
-                  <div>
-                    <p className="font-display text-4xl font-semibold text-gold">{STATS.shadowAi.figure}</p>
-                    <p className="mt-1 text-sm leading-5 text-white/75">use tools nobody approved</p>
-                  </div>
-                  <div>
-                    <p className="font-display text-4xl font-semibold text-gold">22%</p>
-                    <p className="mt-1 text-sm leading-5 text-white/75">have a formal AI risk plan</p>
-                  </div>
-                </div>
-                <figcaption className="mt-6 text-xs leading-5 text-white/55">
-                  {STATS.adoptionVsGovernance.source}.{" "}
-                  <a href={STATS.adoptionVsGovernance.url} target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-white">
-                    Read it
-                  </a>
-                </figcaption>
+          {/* Ruler strip: straddles the hero/next-section boundary. */}
+          <div className="absolute inset-x-5 bottom-0 z-10 translate-y-1/2 sm:inset-x-8">
+            <Reveal delay={320}>
+              <div className="border border-vellum bg-white text-navy shadow-sheet">
+                <TickRule className="text-navy/30" />
+                <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 px-5 py-4 text-[14px] font-semibold" aria-label="AI tools we check">
+                  <li className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-gold-text">
+                    <Crosshair size={12} /> We check
+                  </li>
+                  {AI_ENGINES.map((e) => (
+                    <li key={e} className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-navy" aria-hidden />
+                      {e}
+                    </li>
+                  ))}
+                  <li className="text-xs font-medium text-slate sm:ml-auto">every month, in your city, about your cause</li>
+                </ul>
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
         </Container>
       </section>
 
-      {/* ── Problem ──────────────────────────────────────────────────────────── */}
-      <section id="problem" className="border-t border-vellum bg-white">
-        <Container className="py-16 sm:py-24">
-          <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
-            <Reveal>
+      {/* ── What changed: asymmetric split, the figure bleeds to the viewport edge ─────────── */}
+      <section id="problem" className="pt-32 sm:pt-32 lg:pt-36">
+        <Container>
+          <div className="grid gap-14 lg:grid-cols-12 lg:gap-8">
+            <Reveal className="lg:col-span-6 lg:pr-8">
               <SectionHeading
+                index="02"
                 eyebrow="What changed"
                 title="The way people find you changed, and nobody sent a memo."
                 lede={
@@ -209,16 +252,25 @@ export default function HomePage() {
                 }
               />
             </Reveal>
-            <Reveal delay={120}>
-              <div className="rounded-2xl border border-vellum bg-cream p-6 sm:p-8">
-                <p className="font-display text-5xl font-semibold text-navy sm:text-6xl">
-                  {STATS.aiOverviewClicks.figure}
+
+            <Reveal delay={120} as="figure" className="lg:col-span-6">
+              <div className="bleed-right relative border-y border-l border-vellum bg-white py-10 pl-7 pr-5 sm:pl-10 lg:py-14 lg:pl-14 lg:pr-20">
+                <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-gold-text">
+                  <Crosshair size={12} /> Measured
                 </p>
-                <p className="mt-3 text-base leading-7 text-ink">
-                  {STATS.aiOverviewClicks.claim}
+                <p className="mt-4 font-display text-[clamp(5rem,10vw,9rem)] font-semibold leading-[0.9] text-navy">
+                  ~37
+                  <span className="align-top text-[0.5em] text-gold-deep">%</span>
+                </p>
+                <Dimension className="mt-4 max-w-md text-navy/70" align="left">
+                  fewer clicks to any website
+                </Dimension>
+                <p className="mt-4 max-w-md text-base leading-7 text-ink">
+                  on Google searches where an AI Overview appears (2.4% vs. 3.8% click-through, Feb
+                  2026).
                 </p>
                 <Cite source={STATS.aiOverviewClicks.source} url={STATS.aiOverviewClicks.url} />
-                <p className="mt-5 border-t border-vellum pt-5 text-[15px] leading-7 text-slate">
+                <p className="mt-6 max-w-md border-t border-vellum pt-5 text-[15px] leading-7 text-slate">
                   Put plainly: the people who reach your website are increasingly the ones an AI
                   decided to send. The rest never see a link.
                 </p>
@@ -226,108 +278,132 @@ export default function HomePage() {
             </Reveal>
           </div>
 
-          <ul className="mt-14 grid gap-5 md:grid-cols-3">
+          {/* Friction: three columns divided by hairlines, no boxes. */}
+          <ol className="mt-20 grid gap-10 md:grid-cols-3 md:gap-0 md:divide-x md:divide-navy/15">
             {friction.map((f, i) => (
-              <Reveal as="li" key={f.title} delay={i * 90}>
-                <article className="flex h-full flex-col rounded-2xl border border-vellum bg-cream-2/60 p-6">
-                  <h3 className="text-xl font-semibold leading-snug">{f.title}</h3>
-                  <p className="mt-3 flex-1 text-[15px] leading-7 text-ink">{f.body}</p>
-                  {"cite" in f && <Cite source={f.cite.sourceShort} url={f.cite.url} />}
-                </article>
+              <Reveal as="li" key={f.title} delay={i * 90} className="md:px-8 md:first:pl-0 md:last:pr-0">
+                <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-gold-text">
+                  <Crosshair size={12} /> Friction 0{i + 1}
+                </p>
+                <h3 className="mt-4 text-[24px] font-semibold leading-tight">{f.title}</h3>
+                <p className="mt-3 text-[15px] leading-7 text-ink">{f.body}</p>
+                {"cite" in f && <Cite source={f.cite.sourceShort} url={f.cite.url} />}
               </Reveal>
             ))}
-          </ul>
-        </Container>
-      </section>
-
-      {/* ── Service ladder ───────────────────────────────────────────────────── */}
-      <section id="how-we-help" className="scroll-mt-24">
-        <Container className="py-16 sm:py-24">
-          <Reveal>
-            <SectionHeading
-              eyebrow="How we help"
-              title="Three things you can run. One on the way."
-              lede="In the order most organizations need them. Start with the cheapest, fastest thing that tells you something true about your situation."
-            />
-          </Reveal>
-
-          <ol className="mt-12 grid gap-5 lg:grid-cols-2">
-            {ladder.map((item, i) => {
-              const highlight = item.tone === "gold";
-              const muted = item.tone === "muted";
-              return (
-                <Reveal as="li" key={item.step} delay={i * 80}>
-                  <article
-                    className={`relative flex h-full flex-col rounded-3xl border p-7 sm:p-8 ${
-                      highlight
-                        ? "border-gold/50 bg-white shadow-lift"
-                        : muted
-                          ? "border-dashed border-slate/40 bg-cream-2/50"
-                          : "border-teal-line bg-white shadow-card"
-                    }`}
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <span
-                        className={`font-display text-sm font-bold tracking-wide ${
-                          highlight ? "text-gold-text" : muted ? "text-slate" : "text-teal"
-                        }`}
-                      >
-                        {item.step}
-                      </span>
-                      <span
-                        className={`rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.12em] ${
-                          highlight
-                            ? "bg-gold-tint text-gold-text"
-                            : muted
-                              ? "bg-vellum text-slate"
-                              : "bg-teal-tint text-teal"
-                        }`}
-                      >
-                        {item.kicker}
-                      </span>
-                    </div>
-                    <h3 className="mt-4 text-2xl font-semibold leading-tight sm:text-[28px]">{item.name}</h3>
-                    <p className="mt-1 text-sm font-semibold text-slate">{item.price}</p>
-                    <p className="mt-4 flex-1 text-[15px] leading-7 text-ink">{item.body}</p>
-                    <div className="mt-6">
-                      <ButtonLink
-                        href={item.cta.href}
-                        variant={highlight ? "primary" : "secondary"}
-                        external={/^https?:/.test(item.cta.href)}
-                      >
-                        {item.cta.label}
-                      </ButtonLink>
-                    </div>
-                  </article>
-                </Reveal>
-              );
-            })}
           </ol>
+        </Container>
+      </section>
 
-          <Reveal delay={100}>
-            <p className="mt-8 text-sm text-slate">
-              Details, what you get, and who each one is for:{" "}
-              <Link href="/services" className="font-semibold text-navy underline underline-offset-4">
-                How we help
-              </Link>
-              . The one real price is on the{" "}
-              <Link href="/pricing" className="font-semibold text-navy underline underline-offset-4">
-                pricing page
-              </Link>
-              . We haven&rsquo;t invented the others yet.
-            </p>
+      {/* ── Service ladder: a plan drawn on a sheet, stages stepped down a rail ───────────── */}
+      <section id="how-we-help" className="scroll-mt-24 pb-8 pt-24 lg:pt-32">
+        <Container>
+          <Reveal>
+            <div className="bleed-left relative border border-navy/15 bg-white shadow-sheet">
+              <div className="blueprint-grid grid-fade pointer-events-none absolute inset-0" aria-hidden />
+              <CornerMarks className="text-navy/50" inset={10} />
+
+              <div className="relative px-6 py-14 sm:px-12 lg:px-20 lg:py-20">
+                {/* Title block, as on a drawing. */}
+                <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+                  <SectionHeading
+                    index="03"
+                    eyebrow="How we help"
+                    title="Three things you can run. One on the way."
+                    lede="In the order most organizations need them. Start with the cheapest, fastest thing that tells you something true about your situation."
+                    className="max-w-3xl"
+                  />
+                  <dl className="hidden shrink-0 grid-cols-3 gap-px border border-navy/20 bg-navy/20 text-[11px] font-bold uppercase tracking-[0.16em] sm:grid lg:grid-cols-1">
+                    {[
+                      ["Sheet", "03 of 07"],
+                      ["Scale", "1 : 1"],
+                      ["Drawn for", "Nonprofits"],
+                    ].map(([k, v]) => (
+                      <div key={k} className="bg-white px-3 py-2">
+                        <dt className="text-slate">{k}</dt>
+                        <dd className="mt-0.5 text-navy">{v}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+
+                <ol className="mt-14 lg:mt-20">
+                  {ladder.map((item, i) => {
+                    const first = i === 0;
+                    const last = i === ladder.length - 1;
+                    const muted = item.tone === "muted";
+                    return (
+                      <li key={item.step} className={`relative grid gap-5 py-10 lg:grid-cols-[56px_1fr] lg:gap-8 lg:py-12 ${indent[i]}`}>
+                        <div className="relative hidden lg:block" aria-hidden>
+                          {i > 0 && <span className="absolute -left-16 top-0 h-px w-16 bg-navy/25" />}
+                          {i > 0 && <span className="absolute left-[22px] top-0 h-3 w-px bg-navy/25" />}
+                          <Pivot tone={item.tone} dashed={muted} className={i > 0 ? "mt-3" : ""}>
+                            {item.step}
+                          </Pivot>
+                          {!last && <span className={`absolute left-[22px] w-px bg-navy/25 ${i > 0 ? "top-[56px]" : "top-11"} -bottom-24`} />}
+                        </div>
+                        <span
+                          className="outline-numeral pointer-events-none absolute right-0 top-6 hidden select-none font-display text-[150px] font-semibold leading-none xl:block"
+                          aria-hidden
+                        >
+                          {item.step}
+                        </span>
+                        <div className="relative max-w-2xl">
+                          <p className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] text-gold-text">
+                            <span className="lg:hidden">
+                              <Pivot size={28} tone={item.tone} dashed={muted} className="text-[11px]">
+                                {item.step}
+                              </Pivot>
+                            </span>
+                            <span className="whitespace-nowrap">Stage {item.step}</span>
+                            <span className="h-px w-5 bg-navy/25" aria-hidden />
+                            <span className={muted ? "text-slate" : item.tone === "teal" ? "text-teal" : ""}>{item.kicker}</span>
+                          </p>
+                          <h3 className="mt-4 text-[30px] font-semibold leading-tight sm:text-[36px]">{item.name}</h3>
+                          <p className="mt-1.5 text-sm font-semibold tabular-nums text-slate">{item.price}</p>
+                          <p className="mt-5 text-[16px] leading-8 text-ink">{item.body}</p>
+                          <div className="mt-6">
+                            {first ? (
+                              <ButtonLink href={item.cta.href}>{item.cta.label}</ButtonLink>
+                            ) : (
+                              <ButtonLink href={item.cta.href} variant="ghost" external={/^(https?:|mailto:)/.test(item.cta.href)}>
+                                {item.cta.label}
+                              </ButtonLink>
+                            )}
+                          </div>
+                        </div>
+                        {!last && <span className="absolute inset-x-0 bottom-0 h-px bg-navy/10 lg:hidden" aria-hidden />}
+                      </li>
+                    );
+                  })}
+                </ol>
+
+                <p className="mt-6 max-w-2xl text-sm text-slate">
+                  Details, what you get, and who each one is for:{" "}
+                  <Link href="/services" className="font-semibold text-navy underline decoration-gold underline-offset-4">
+                    How we help
+                  </Link>
+                  . The one real price is on the{" "}
+                  <Link href="/pricing" className="font-semibold text-navy underline decoration-gold underline-offset-4">
+                    pricing page
+                  </Link>
+                  . We haven&rsquo;t invented the others yet.
+                </p>
+              </div>
+            </div>
           </Reveal>
         </Container>
       </section>
 
-      {/* ── Why KLG ──────────────────────────────────────────────────────────── */}
-      <section id="why-klg" className="bg-navy text-white">
-        <div className="dot-texture">
-          <Container className="py-16 sm:py-24">
-            <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
-              <Reveal>
+      {/* ── Why KLG: navy panel; the 7% figure hangs over its bottom edge ─────────────────── */}
+      <section id="why-klg" className="mt-20 lg:mt-28">
+        <div className="relative bg-navy text-white">
+          <div className="blueprint-grid-light grid-fade pointer-events-none absolute inset-0" aria-hidden />
+          <Container className="relative pt-20 lg:pb-px lg:pt-28">
+            <div className="grid gap-14 lg:grid-cols-12 lg:gap-8">
+              <Reveal className="lg:col-span-6">
                 <SectionHeading
                   tone="light"
+                  index="04"
                   eyebrow="Why Kind Logic Group"
                   title="You don't need another deck."
                   lede={
@@ -341,151 +417,165 @@ export default function HomePage() {
                     </>
                   }
                 />
-                <div className="mt-8 rounded-2xl border border-white/15 bg-white/5 p-6">
-                  <p className="font-display text-5xl font-semibold text-gold">{STATS.adoptionVsImpact.figure}</p>
-                  <p className="mt-2 text-base leading-7 text-white/85">{STATS.adoptionVsImpact.claim}</p>
-                  <p className="mt-3 text-sm leading-6 text-white/60">
-                    A tool is not a strategy. The gap between those two numbers is where most of the
-                    money goes.{" "}
-                    <a href={STATS.adoptionVsImpact.url} target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-white">
-                      {STATS.adoptionVsImpact.sourceShort}
-                    </a>
-                  </p>
-                </div>
               </Reveal>
 
-              <ul className="grid gap-4 self-center">
-                {[
-                  {
-                    t: "Plain English or it doesn't ship.",
-                    b: "Every report, every policy draft, every email is written for a busy executive director, not for the IT person you don't have.",
-                  },
-                  {
-                    t: "Built for the $1M–$30M range.",
-                    b: "Big enough to have a development director. Not big enough to have a technology department. That's the organization we design for, and the only one.",
-                  },
-                  {
-                    t: "One flat price on the thing we can price.",
-                    b: `The visibility service is ${AEO_PRICE_PER_MONTH} a month, same for everyone. No tiers, no seats, no surprise line items. The rest is scoped with you, in writing, before any work starts.`,
-                  },
-                  {
-                    t: "A plan people actually follow.",
-                    b: "Twenty-two years in the Navy teaches you that the best plan is the one the crew can run at 2 a.m. without the person who wrote it. That is the standard for everything we hand you.",
-                  },
-                ].map((p, i) => (
-                  <Reveal as="li" key={p.t} delay={i * 80}>
-                    <div className="rounded-2xl border border-white/12 bg-white/[0.04] p-5 transition-colors hover:bg-white/[0.07]">
-                      <h3 className="text-lg font-semibold text-white">{p.t}</h3>
-                      <p className="mt-2 text-[15px] leading-7 text-white/75">{p.b}</p>
+              <ol className="border-t border-white/15 lg:col-span-5 lg:col-start-8">
+                {principles.map((p, i) => (
+                  <Reveal as="li" key={p.t} delay={i * 80} className="grid grid-cols-[44px_1fr] border-b border-white/15 py-6">
+                    <span className="font-display text-lg font-bold tabular-nums text-gold" aria-hidden>
+                      0{i + 1}
+                    </span>
+                    <div>
+                      <h3 className="text-[20px] font-semibold leading-snug text-white">{p.t}</h3>
+                      <p className="mt-2 text-[15px] leading-7 text-white/70">{p.b}</p>
                     </div>
                   </Reveal>
                 ))}
-              </ul>
+              </ol>
             </div>
+
+            {/* Overhanging figure: white sheet that crosses into the next section. */}
+            <Reveal delay={120} as="figure" className="relative z-10 mt-16 lg:-mb-24 lg:mt-20 lg:max-w-3xl">
+              <div className="relative border-t-2 border-gold bg-white p-7 text-navy shadow-sheet sm:p-10">
+                <CornerMarks className="text-navy/30" inset={8} />
+                <div className="grid items-end gap-6 sm:grid-cols-[auto_1fr] sm:gap-10">
+                  <p className="font-display text-[7rem] font-semibold leading-[0.9] sm:text-[8.5rem]">
+                    7<span className="align-top text-[0.5em] text-gold-deep">%</span>
+                  </p>
+                  <div>
+                    <Dimension className="text-navy/70" align="left">
+                      report real strategic impact from AI
+                    </Dimension>
+                    <p className="mt-3 text-base leading-7 text-ink">
+                      even though 92% use it. A tool is not a strategy. The gap between those two
+                      numbers is where most of the money goes.
+                    </p>
+                    <Cite source={STATS.adoptionVsImpact.source} url={STATS.adoptionVsImpact.url} />
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+            <div className="h-16 lg:hidden" aria-hidden />
           </Container>
         </div>
       </section>
 
-      {/* ── Who we serve ─────────────────────────────────────────────────────── */}
-      <section id="who-we-serve" className="bg-white">
-        <Container className="py-16 sm:py-24">
+      {/* ── Who we serve: the range drawn as a scale ───────────────────────────────────────── */}
+      <section id="who-we-serve" className="pt-20 lg:pt-44">
+        <Container>
           <Reveal>
             <SectionHeading
+              index="05"
               eyebrow="Who we serve"
               title="Nonprofits raising $1M to $30M a year."
               lede="Under a million, you're probably still doing everything yourself, and the free report is still yours to use. Over thirty, you likely have a technology team, and you're welcome to send them our way. In between is where a small firm can change the most with the least."
             />
           </Reveal>
-          <ul className="mt-12 grid gap-5 md:grid-cols-3">
+          <Reveal delay={100}>
+            <Scale
+              className="mt-14"
+              min={0}
+              max={40}
+              from={1}
+              to={30}
+              majorEvery={5}
+              minorEvery={1}
+              format={(n) => (n === 0 ? "$0" : `$${n}M`)}
+              rangeLabel="Where we do our best work"
+              fromLabel="$1M"
+              toLabel="$30M"
+            />
+          </Reveal>
+
+          <ul className="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
             {audience.map((a, i) => (
-              <Reveal as="li" key={a.role} delay={i * 90}>
-                <article className="h-full rounded-2xl border border-vellum bg-cream p-6">
-                  <h3 className="text-xl font-semibold">{a.role}</h3>
-                  <p className="mt-3 text-[15px] leading-7 text-ink">{a.body}</p>
-                </article>
+              <Reveal as="li" key={a.role} delay={i * 90} className="border-t border-navy/25 pt-5">
+                <h3 className="font-sans text-[12px] font-bold uppercase tracking-[0.18em] text-navy">{a.role}</h3>
+                <p className="mt-3 text-[15px] leading-7 text-ink">{a.body}</p>
               </Reveal>
             ))}
           </ul>
+
           <Reveal delay={200}>
-            <div className="mt-10 flex flex-col items-start gap-4 rounded-2xl border border-teal-line bg-teal-tint p-6 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-[15px] leading-7 text-ink">
-                Not sure you fit? Fifteen minutes on the phone is enough to tell you honestly. If
-                we&rsquo;re not the right help, we&rsquo;ll say so and point you somewhere useful.
-              </p>
-              <ButtonLink href={BOOKING_URL} variant="secondary" className="shrink-0">
+            <p className="mt-12 max-w-3xl text-[15px] leading-7 text-slate">
+              Not sure you fit? Fifteen minutes on the phone is enough to tell you honestly. If
+              we&rsquo;re not the right help, we&rsquo;ll say so and point you somewhere useful.{" "}
+              <a href={BOOKING_URL} target="_blank" rel="noopener" className="font-semibold text-navy underline decoration-gold underline-offset-4">
                 Book a call
-              </ButtonLink>
-            </div>
+              </a>
+              .
+            </p>
           </Reveal>
         </Container>
       </section>
 
-      {/* ── Why now ──────────────────────────────────────────────────────────── */}
-      <section id="why-now">
-        <Container className="py-16 sm:py-24">
-          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
-            <Reveal>
+      {/* ── Why now: a tick rule separates it, not a colour change ─────────────────────────── */}
+      <section id="why-now" className="mt-20 lg:mt-28">
+        <Container>
+          <TickRule className="text-navy/40" />
+          <div className="grid gap-14 pt-14 lg:grid-cols-12 lg:gap-8 lg:pt-20">
+            <Reveal className="lg:col-span-5">
               <SectionHeading
+                index="06"
                 eyebrow="Why now"
                 title="The cost of waiting is quiet."
                 lede="Nothing breaks. No error message. The phone doesn't ring less; it just rings less than it would have. Meanwhile funders are starting to ask about AI governance in the application itself."
               />
-              <div className="mt-8 rounded-2xl border border-coral-line bg-coral-tint p-6">
-                <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-coral-text">Already in the fine print</p>
+              <blockquote className="mt-10 border-l-2 border-coral pl-5">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-coral-text">Already in the fine print</p>
                 <p className="mt-3 text-[15px] leading-7 text-ink">{STATS.gatesRequirement.claim}</p>
                 <Cite source={STATS.gatesRequirement.source} url={STATS.gatesRequirement.url} />
-              </div>
+              </blockquote>
             </Reveal>
-            <Reveal delay={120}>
-              <div className="rounded-3xl border border-vellum bg-white p-7 shadow-card sm:p-9">
-                <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-gold-text">Three things you can do today</p>
-                <ol className="mt-5 space-y-6">
-                  {today.map((t, i) => (
-                    <li key={t.step} className="flex gap-4">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-navy font-display text-base font-bold text-gold">
-                        {i + 1}
-                      </span>
-                      <div>
-                        <h3 className="font-sans text-lg font-semibold text-navy">{t.step}</h3>
-                        <p className="mt-1 text-[15px] leading-7 text-ink">{t.body}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <ButtonLink href={FREE_REPORT_URL}>Get the free report</ButtonLink>
-                  <ButtonLink href="/services" variant="ghost">
-                    Or read how the service works first
-                  </ButtonLink>
-                </div>
+
+            <Reveal delay={120} className="lg:col-span-6 lg:col-start-7">
+              <p className="flex items-center gap-2 border-t border-navy/25 pt-5 text-[11px] font-bold uppercase tracking-[0.2em] text-gold-text">
+                <Crosshair size={12} /> Three things you can do today
+              </p>
+              <ol className="mt-8">
+                {today.map((t, i) => (
+                  <li key={t.step} className="relative grid grid-cols-[44px_1fr] gap-5 pb-9 last:pb-0">
+                    {i < today.length - 1 && <span className="absolute bottom-0 left-[17px] top-9 w-px bg-navy/20" aria-hidden />}
+                    <Pivot size={36} tone={i === 2 ? "gold" : "navy"}>{i + 1}</Pivot>
+                    <div className="pt-1">
+                      <h3 className="font-sans text-lg font-semibold text-navy">{t.step}</h3>
+                      <p className="mt-1 text-[15px] leading-7 text-ink">{t.body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <ButtonLink href={FREE_REPORT_URL}>Get the free report</ButtonLink>
+                <ButtonLink href="/services" variant="ghost">
+                  Or read how the service works first
+                </ButtonLink>
               </div>
             </Reveal>
           </div>
         </Container>
       </section>
 
-      {/* ── Closing CTA ──────────────────────────────────────────────────────── */}
-      <section className="hero-backdrop border-t border-vellum">
-        <Container className="py-16 sm:py-24">
+      {/* ── Closing CTA: the arc returns, type does the work ────────────────────────────────── */}
+      <section className="relative mt-24 overflow-hidden border-t border-navy/15 bg-cream-2 lg:mt-32">
+        <ArcSweep className="pointer-events-none absolute -bottom-16 -right-16 h-[120%] w-auto max-w-none text-navy" strokeOpacity={0.14} />
+        <Container className="relative py-20 lg:py-28">
           <Reveal>
-            <div className="mx-auto max-w-3xl text-center">
-              <Eyebrow>Start small, start today</Eyebrow>
-              <h2 className="text-3xl font-semibold leading-[1.12] sm:text-4xl lg:text-5xl">
-                Find out what the AI tools say about you. Then decide.
-              </h2>
-              <p className="mt-5 text-lg leading-8 text-slate">
-                The free report runs the same checks the monthly service does, once, and lists the
-                top fixes. If it says you&rsquo;re fine, you&rsquo;ll know. If it doesn&rsquo;t,
-                you&rsquo;ll know what to do first.
-              </p>
-              <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-                <ButtonLink href={FREE_REPORT_URL} size="lg">
-                  See your AI visibility score
-                </ButtonLink>
-                <ButtonLink href={BOOKING_URL} variant="secondary" size="lg">
-                  Talk it through first
-                </ButtonLink>
-              </div>
+            <SheetLabel index="07">Start small, start today</SheetLabel>
+            <h2 className="mt-8 max-w-[16ch] text-[40px] font-semibold leading-[1.02] sm:text-[52px] lg:text-[68px]">
+              Find out what the AI tools say about you. <em className="italic text-gold-deep">Then</em> decide.
+            </h2>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-slate">
+              The free report runs the same checks the monthly service does, once, and lists the
+              top fixes. If it says you&rsquo;re fine, you&rsquo;ll know. If it doesn&rsquo;t,
+              you&rsquo;ll know what to do first.
+            </p>
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+              <ButtonLink href={FREE_REPORT_URL} size="lg">
+                See your AI visibility score
+              </ButtonLink>
+              <ButtonLink href={BOOKING_URL} variant="secondary" size="lg">
+                Talk it through first
+              </ButtonLink>
             </div>
           </Reveal>
         </Container>

@@ -10,7 +10,9 @@ export function RevealObserver() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const nodes = Array.from(document.querySelectorAll<HTMLElement>(".reveal:not(.is-visible)"));
+    const nodes = Array.from(
+      document.querySelectorAll<HTMLElement>(".reveal:not(.is-visible), .reveal-line:not(.is-visible)"),
+    );
     if (nodes.length === 0) return;
 
     if (typeof IntersectionObserver === "undefined") {
@@ -46,7 +48,7 @@ export function Reveal({
   children: React.ReactNode;
   delay?: number;
   className?: string;
-  as?: "div" | "section" | "article" | "li" | "figure";
+  as?: "div" | "section" | "article" | "li" | "figure" | "span";
 }) {
   return (
     <Tag className={`reveal ${className}`} style={{ "--reveal-delay": `${delay}ms` } as React.CSSProperties}>
