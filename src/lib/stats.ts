@@ -17,7 +17,7 @@ export const STATS = {
     id: "adoption-vs-governance",
     figure: "98%",
     claim:
-      "of nonprofits use AI in some capacity. Only 61% use it officially, and just 22% have a formal AI risk-management plan.",
+      "of nonprofits use AI in some capacity. 53% of staff and execs use tools their organization never approved, and just 22% have a formal AI risk-management plan.",
     source: 'NTEN & The Bridgespan Group, "2026 State of Nonprofit AI: Adoption and Governance Report" (n=917)',
     sourceShort: "NTEN & Bridgespan, Sept 2026",
     url: "https://www.nten.org/publications/state-of-nonprofit-ai",

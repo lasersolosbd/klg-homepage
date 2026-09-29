@@ -171,8 +171,8 @@ export default function HomePage() {
                 <p className="mt-2 text-lg leading-7 text-white/90">of nonprofits already use AI in some way.</p>
                 <div className="mt-6 grid grid-cols-2 gap-4 border-t border-white/15 pt-6">
                   <div>
-                    <p className="font-display text-4xl font-semibold text-gold">61%</p>
-                    <p className="mt-1 text-sm leading-5 text-white/75">use it officially</p>
+                    <p className="font-display text-4xl font-semibold text-gold">{STATS.shadowAi.figure}</p>
+                    <p className="mt-1 text-sm leading-5 text-white/75">use tools nobody approved</p>
                   </div>
                   <div>
                     <p className="font-display text-4xl font-semibold text-gold">22%</p>
