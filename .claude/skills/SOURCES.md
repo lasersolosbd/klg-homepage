@@ -36,3 +36,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+Also added (Mark, Sept 29 2026, "most popular" skills for avoiding generic
+AI design output, per skills.sh install counts):
+
+- frontend-design/ — from https://github.com/anthropics/skills (Anthropic's
+  own official skills repo). 936K installs on skills.sh, the most-installed
+  design-related skill there. Apache 2.0 / license in LICENSE.txt.
+- design-taste-frontend/ — from https://github.com/leonxlnx/taste-skill
+  (skill file: skills/taste-skill/SKILL.md upstream). 538K installs on
+  skills.sh, the most popular of several "taste skill" repos found —
+  license per that repo, see https://github.com/leonxlnx/taste-skill.
