@@ -85,7 +85,15 @@ export function SiteFooter() {
               · {HOME_COORDINATES}
             </span>
           </p>
-          <LastUpdated className="!text-white/60" />
+          <div className="flex items-center gap-4">
+            <Link href="/privacy" className="hover:text-white hover:underline">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-white hover:underline">
+              Terms
+            </Link>
+            <LastUpdated className="!text-white/60" />
+          </div>
         </div>
       </div>
     </footer>
