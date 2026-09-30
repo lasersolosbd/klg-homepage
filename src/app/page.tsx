@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ButtonLink } from "@/components/Buttons";
+import { ContactForm } from "@/components/ContactForm";
 import { CountUp } from "@/components/CountUp";
 import { ArcSweep, CornerMarks, Crosshair, Dimension, Pivot, SheetLabel, TickRule } from "@/components/Drafting";
 import { EngineDial } from "@/components/EngineDial";
@@ -588,6 +589,26 @@ export default function HomePage() {
               </ButtonLink>
             </div>
           </Reveal>
+        </Container>
+      </section>
+
+      <section id="contact" className="scroll-mt-24 pb-24 pt-20 lg:pt-28">
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
+            <Reveal className="lg:col-span-4">
+              <SectionHeading
+                index="08"
+                eyebrow="Or skip the call"
+                title="Write to us directly."
+                lede="Name, email, what's on your mind. We reply by email within one business day, or by text if you'd rather hear it there."
+              />
+            </Reveal>
+            <Reveal delay={100} className="lg:col-span-8">
+              <div className="rounded-[3px] border border-navy/15 bg-vellum/40 p-6 sm:p-9">
+                <ContactForm />
+              </div>
+            </Reveal>
+          </div>
         </Container>
       </section>
     </>

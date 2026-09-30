@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { ButtonLink } from "@/components/Buttons";
+import { ContactForm } from "@/components/ContactForm";
 import { Crosshair, Pivot, SheetLabel } from "@/components/Drafting";
 import { JsonLd } from "@/components/JsonLd";
 import { Reveal } from "@/components/Reveal";
-import { Container } from "@/components/Section";
+import { Container, SectionHeading } from "@/components/Section";
 import {
   BOOKING_URL,
   CONTACT_EMAIL,
@@ -126,6 +127,26 @@ export default function ContactPage() {
               </div>
             </div>
           </Reveal>
+        </Container>
+      </section>
+
+      <section id="contact-form" className="relative overflow-hidden pb-24 pt-4 sm:pt-8">
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
+            <Reveal className="lg:col-span-4">
+              <SectionHeading
+                index="C-02"
+                eyebrow="Or write it down"
+                title="Send us a message."
+                lede="Same inbox as the button above. Tell us what you're working on and we'll reply by email — or by text, if you'd rather."
+              />
+            </Reveal>
+            <Reveal delay={100} className="lg:col-span-8">
+              <div className="rounded-[3px] border border-navy/15 bg-vellum/40 p-6 sm:p-9">
+                <ContactForm />
+              </div>
+            </Reveal>
+          </div>
         </Container>
       </section>
     </>

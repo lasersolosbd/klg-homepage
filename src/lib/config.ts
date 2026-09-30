@@ -21,14 +21,21 @@ export const BOOKING_URL =
 // Public contact address. Same inbox the AEO tool site uses; override before go-live if needed.
 export const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "hello@kindlogicgroup.com";
 
+// Where the contact form (homepage + /contact) submits to: the "KLG Homepage Contact Form" n8n
+// workflow, which upserts the contact in GHL with SMS-consent tags. Override with
+// NEXT_PUBLIC_CONTACT_FORM_URL if the n8n instance or webhook path ever changes.
+export const CONTACT_FORM_URL =
+  process.env.NEXT_PUBLIC_CONTACT_FORM_URL ??
+  "https://solobusinessdude.app.n8n.cloud/webhook/klg-contact-form";
+
 // The one real price on the site. Everything else is "contact us" until Mark sets numbers.
 export const AEO_PRICE_PER_MONTH = "$579";
 
 // Freshness signal. Bump this whenever page copy changes; it feeds the visible "Last updated"
 // line, the article:modified_time meta tag and dateModified in JSON-LD (all three are what the
 // AEO readiness check reads).
-export const LAST_UPDATED = "2026-09-29";
-export const LAST_UPDATED_LABEL = "September 29, 2026";
+export const LAST_UPDATED = "2026-09-30";
+export const LAST_UPDATED_LABEL = "September 30, 2026";
 
 // Location and service area, written in plain text on the site (readiness check: location visible).
 export const HOME_CITY = "Longmont";
