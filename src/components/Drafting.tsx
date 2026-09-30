@@ -38,7 +38,7 @@ export function Pivot({
   className = "",
 }: {
   size?: number;
-  tone?: "navy" | "gold" | "teal" | "muted" | "light";
+  tone?: "navy" | "gold" | "teal" | "coral" | "muted" | "light";
   dashed?: boolean;
   children?: ReactNode;
   className?: string;
@@ -48,11 +48,13 @@ export function Pivot({
       ? "border-gold bg-gold text-navy"
       : tone === "teal"
         ? "border-teal bg-white text-teal"
-        : tone === "muted"
-          ? "border-slate/50 bg-cream text-slate"
-          : tone === "light"
-            ? "border-white/70 bg-navy text-white"
-            : "border-navy bg-white text-navy";
+        : tone === "coral"
+          ? "border-coral bg-white text-coral-text"
+          : tone === "muted"
+            ? "border-slate/50 bg-cream text-slate"
+            : tone === "light"
+              ? "border-white/70 bg-navy text-white"
+              : "border-navy bg-white text-navy";
   return (
     <span
       className={`relative inline-flex shrink-0 items-center justify-center rounded-full border font-display text-sm font-bold ${
@@ -222,7 +224,8 @@ export function ArcSweep({
 
 /**
  * Scale: a horizontal ruler with labeled major ticks and a highlighted range, in HTML so the
- * labels stay readable at every width. Used on "who we serve" to draw $1M–$30M as a measurement.
+ * labels stay readable at every width. Not currently used on any page — kept available for a
+ * future numeric range that's fine to show publicly (revenue-band segmentation isn't).
  */
 export function Scale({
   min,

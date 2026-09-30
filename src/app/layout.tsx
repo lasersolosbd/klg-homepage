@@ -2,10 +2,11 @@ import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { MobileStickyCta } from "@/components/MobileStickyCta";
 import { RevealObserver } from "@/components/Reveal";
 import { JsonLd } from "@/components/JsonLd";
 import { organizationSchema, websiteSchema } from "@/lib/schema";
-import { BRAND_NAME, LAST_UPDATED, SITE_URL } from "@/lib/config";
+import { AUDIENCE, BRAND_NAME, LAST_UPDATED, SITE_URL } from "@/lib/config";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -24,8 +25,7 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 const TITLE = "AI consulting for nonprofits: get found in AI answers, set an AI policy your board will sign";
-const DESCRIPTION =
-  "Kind Logic Group helps nonprofits raising $1M–$30M a year show up correctly when people ask ChatGPT, Claude, Gemini or Google about their cause, and write an AI use policy the board actually adopts. Plain English, flat pricing, based in Longmont, Colorado.";
+const DESCRIPTION = `Kind Logic Group helps ${AUDIENCE} show up correctly when people ask ChatGPT, Claude, Gemini or Google about their cause, and write an AI use policy the board actually adopts. Plain English, flat pricing, based in Longmont, Colorado.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -80,7 +80,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <JsonLd data={organizationSchema()} />
         <JsonLd data={websiteSchema()} />
       </head>
-      <body className="flex min-h-full flex-col bg-cream text-ink">
+      <body className="flex min-h-full flex-col bg-cream pb-20 text-ink sm:pb-0">
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-navy focus:px-4 focus:py-2 focus:text-white"
@@ -92,6 +92,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <SiteFooter />
+        <MobileStickyCta />
         <RevealObserver />
       </body>
     </html>

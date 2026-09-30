@@ -39,8 +39,9 @@ export const SERVICE_AREA_LONG =
 // Longmont's coordinates, shown in the footer as a drafting-sheet flourish (decorative, aria-hidden).
 export const HOME_COORDINATES = "40.17° N, 105.10° W";
 
-// Who the firm is for, said the same way everywhere.
-export const AUDIENCE = "nonprofits raising $1M–$30M a year";
+// Who the firm is for, said the same way everywhere. The $1M–$30M revenue band that shaped who
+// we target is internal — visitors never see a dollar figure, just the qualitative version.
+export const AUDIENCE = "mission-driven nonprofits";
 
 export const AI_ENGINES = ["ChatGPT", "Claude", "Gemini", "Grok", "Perplexity", "Google AI Mode"] as const;
 

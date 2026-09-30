@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ButtonLink } from "@/components/Buttons";
 import { CountUp } from "@/components/CountUp";
-import { ArcSweep, CornerMarks, Crosshair, Dimension, Pivot, Scale, SheetLabel, TickRule } from "@/components/Drafting";
+import { ArcSweep, CornerMarks, Crosshair, Dimension, Pivot, SheetLabel, TickRule } from "@/components/Drafting";
+import { EngineDial } from "@/components/EngineDial";
 import { JsonLd } from "@/components/JsonLd";
 import { Reveal } from "@/components/Reveal";
 import { Cite, Container, SectionHeading } from "@/components/Section";
@@ -41,6 +42,15 @@ const ladder = [
   },
   {
     step: "03",
+    name: "AI consulting",
+    kicker: "Do you even need this?",
+    price: "Scoped after a short audit",
+    body: "Before you buy anything, you should know what AI could actually do for your organization, and what it can't. We audit your operations — donor communications, program delivery, the admin nobody has time for — and hand you a plain-English map of where AI genuinely helps and where it's not worth the risk.",
+    cta: { label: "Ask for an audit", href: "/contact" },
+    tone: "coral",
+  },
+  {
+    step: "04",
     name: "Keep the visibility going",
     kicker: "The monthly habit",
     price: `Included in the ${AEO_PRICE_PER_MONTH}/month`,
@@ -49,7 +59,7 @@ const ladder = [
     tone: "navy",
   },
   {
-    step: "04",
+    step: "05",
     name: "AI assistants for staff",
     kicker: "Coming soon",
     price: "On the roadmap",
@@ -60,7 +70,7 @@ const ladder = [
 ] as const;
 
 // Stair-step indents for the plan rail, one static class per stage so Tailwind can see them.
-const indent = ["lg:pl-0", "lg:pl-16", "lg:pl-32", "lg:pl-48"] as const;
+const indent = ["lg:pl-0", "lg:pl-12", "lg:pl-24", "lg:pl-36", "lg:pl-48"] as const;
 
 const friction = [
   {
@@ -84,7 +94,7 @@ const principles = [
     b: "Every report, every policy draft, every email is written for a busy executive director, not for the IT person you don't have.",
   },
   {
-    t: "Built for the $1M–$30M range.",
+    t: "Built for the in-between.",
     b: "Big enough to have a development director. Not big enough to have a technology department. That's the organization we design for, and the only one.",
   },
   {
@@ -135,7 +145,7 @@ export default function HomePage() {
           path: "/",
           name: "Kind Logic Group: AI consulting for nonprofits",
           description:
-            "AI-answer visibility, AI use policy, and (soon) AI assistants for nonprofits raising $1M–$30M a year.",
+            "AI-answer visibility, AI use policy, and (soon) AI assistants for mission-driven nonprofits.",
         })}
       />
 
@@ -152,7 +162,7 @@ export default function HomePage() {
         <Container className="relative pb-24 pt-14 sm:pt-20 lg:pb-32 lg:pt-24">
           <Reveal>
             <SheetLabel index="01" tone="light">
-              For nonprofits raising $1M–$30M a year
+              For mission-driven organizations
             </SheetLabel>
           </Reveal>
 
@@ -165,7 +175,7 @@ export default function HomePage() {
             </h1>
           </Reveal>
 
-          <div className="mt-12 grid gap-14 lg:mt-16 lg:grid-cols-12 lg:gap-8">
+          <div className="mt-12 grid items-center gap-14 lg:mt-16 lg:grid-cols-12 lg:gap-8">
             <Reveal delay={160} className="lg:col-span-6">
               <p className="max-w-xl text-lg leading-8 text-white/75 sm:text-xl sm:leading-9">
                 Kind Logic Group helps nonprofits get found in AI answers, write an AI policy the
@@ -185,34 +195,10 @@ export default function HomePage() {
               </p>
             </Reveal>
 
-            {/* The stat is a measurement being taken, not a card fading in — it counts up once,
-                the way a reading settles on an instrument, and the number itself wipes on. */}
-            <Reveal delay={240} as="figure" variant="reveal-measure" className="lg:col-span-5 lg:col-start-8">
-              <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-gold">
-                <Crosshair size={12} /> The sector, this month
-              </p>
-              <p className="mt-3 font-display text-[clamp(6rem,12vw,10.5rem)] font-semibold leading-[0.9] text-white">
-                <CountUp value={98} suffix="" /><span className="align-top text-[0.5em] leading-none text-gold">%</span>
-              </p>
-              <Dimension className="mt-3 text-gold" align="left">
-                of nonprofits already use AI
-              </Dimension>
-              <ul className="mt-8 grid grid-cols-2 gap-6">
-                <li className="border-l border-white/30 pl-4">
-                  <p className="font-display text-4xl font-semibold text-white">{STATS.shadowAi.figure}</p>
-                  <p className="mt-1 text-sm leading-5 text-white/70">use tools nobody approved</p>
-                </li>
-                <li className="border-l border-white/30 pl-4">
-                  <p className="font-display text-4xl font-semibold text-white">22%</p>
-                  <p className="mt-1 text-sm leading-5 text-white/70">have a formal AI risk plan</p>
-                </li>
-              </ul>
-              <figcaption className="mt-6 text-xs leading-5 text-white/50">
-                {STATS.adoptionVsGovernance.source}.{" "}
-                <a href={STATS.adoptionVsGovernance.url} target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-white">
-                  Read it
-                </a>
-              </figcaption>
+            {/* The instrument: a real dial reading the six engines the AEO tool checks, not a
+                browser-chrome mockup of an AI answer. */}
+            <Reveal delay={240} className="lg:col-span-6">
+              <EngineDial />
             </Reveal>
           </div>
 
@@ -303,6 +289,21 @@ export default function HomePage() {
               </Reveal>
             ))}
           </ol>
+
+          {/* A second CTA, short trip down from the hero — the free report is the answer to the
+              three problems just above, so it earns a moment here rather than waiting until the
+              service ladder or the very bottom of the page. */}
+          <Reveal delay={100}>
+            <div className="mt-16 flex flex-col items-start gap-5 border-t border-navy/15 pt-10 sm:flex-row sm:items-center sm:justify-between">
+              <p className="max-w-md text-[15px] leading-7 text-slate">
+                You don&rsquo;t have to guess which of these apply to you. The free report shows
+                what {AI_ENGINES.length} AI tools say about your organization right now.
+              </p>
+              <ButtonLink href={FREE_REPORT_URL} size="lg" className="shrink-0">
+                See your AI visibility score
+              </ButtonLink>
+            </div>
+          </Reveal>
         </Container>
       </section>
 
@@ -368,7 +369,19 @@ export default function HomePage() {
                             </span>
                             <span className="whitespace-nowrap">Stage {item.step}</span>
                             <span className="h-px w-5 bg-navy/25" aria-hidden />
-                            <span className={muted ? "text-slate" : item.tone === "teal" ? "text-teal" : ""}>{item.kicker}</span>
+                            <span
+                              className={
+                                muted
+                                  ? "text-slate"
+                                  : item.tone === "teal"
+                                    ? "text-teal"
+                                    : item.tone === "coral"
+                                      ? "text-coral-text"
+                                      : ""
+                              }
+                            >
+                              {item.kicker}
+                            </span>
                           </p>
                           <h3 className="mt-4 text-[30px] font-semibold leading-tight sm:text-[36px]">{item.name}</h3>
                           <p className="mt-1.5 text-sm font-semibold tabular-nums text-slate">{item.price}</p>
@@ -472,30 +485,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Who we serve: the range drawn as a scale ───────────────────────────────────────── */}
+      {/* ── Who we serve: by role, not by a revenue bracket ─────────────────────────────────── */}
       <section id="who-we-serve" className="pt-20 lg:pt-44">
         <Container>
           <Reveal>
             <SectionHeading
               index="05"
               eyebrow="Who we serve"
-              title="Nonprofits raising $1M to $30M a year."
-              lede="Under a million, you're probably still doing everything yourself, and the free report is still yours to use. Over thirty, you likely have a technology team, and you're welcome to send them our way. In between is where a small firm can change the most with the least."
-            />
-          </Reveal>
-          <Reveal delay={100}>
-            <Scale
-              className="mt-14"
-              min={0}
-              max={40}
-              from={1}
-              to={30}
-              majorEvery={5}
-              minorEvery={1}
-              format={(n) => (n === 0 ? "$0" : `$${n}M`)}
-              rangeLabel="Where we do our best work"
-              fromLabel="$1M"
-              toLabel="$30M"
+              title="Nonprofits in the in-between."
+              lede="Not so small you're doing everything yourself with no spare afternoon — the free report is still yours to use either way. Not so large you already have a technology team of your own. In between is where a small firm can change the most with the least."
             />
           </Reveal>
 

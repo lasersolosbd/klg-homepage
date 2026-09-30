@@ -28,14 +28,14 @@ export const metadata: Metadata = {
 const faq = [
   {
     q: "Why is the visibility service one flat price?",
-    a: "Because the work is the same whether you raise $1M or $30M. The AI tools don't care about your budget, and neither does the check.",
+    a: "Because the work is the same whether you're a small shop or a large one. The AI tools don't care about your budget, and neither does the check.",
   },
   {
     q: "Is there a contract?",
     a: "Month to month. The first month usually has the longest to-do list; after that it's maintenance. Stop when it stops being useful.",
   },
   {
-    q: "What if we're under $1M?",
+    q: "What if we're a small organization?",
     a: "Run the free report anyway. It's genuinely free and the fixes are yours to make. If you subscribe later, the price is the same.",
   },
 ] as const;
