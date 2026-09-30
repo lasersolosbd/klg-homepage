@@ -57,9 +57,25 @@ export function Reveal({
   as?: "div" | "section" | "article" | "li" | "figure" | "span";
   variant?: "reveal" | "reveal-wipe" | "reveal-measure" | "reveal-draw" | "reveal-stagger";
 }) {
+  // "reveal-wipe" and "reveal-measure" hide their element with a clip-path that starts at zero
+  // area. That element is also the one RevealObserver watches — and a clip-path that clips an
+  // element to zero visible area makes IntersectionObserver report it as never intersecting
+  // (isIntersecting stays false, intersectionRatio stays 0), even while its layout box sits
+  // fully inside the viewport. The result is a deadlock: the element must be seen to be revealed,
+  // but being hidden is exactly what stops it from ever being seen. So for these two variants the
+  // clip-path goes on an inner, unobserved "surface" span instead — the outer element that
+  // RevealObserver watches stays fully unclipped and reports intersection correctly, and a CSS
+  // descendant selector off its `.is-visible` class reveals the inner surface.
+  const hasClipSurface = variant === "reveal-wipe" || variant === "reveal-measure";
   return (
     <Tag className={`${variant} ${className}`} style={{ "--reveal-delay": `${delay}ms` } as React.CSSProperties}>
-      {children}
+      {hasClipSurface ? (
+        <span className={`${variant}-surface`} style={{ display: "block" }}>
+          {children}
+        </span>
+      ) : (
+        children
+      )}
     </Tag>
   );
 }

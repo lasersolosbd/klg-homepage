@@ -209,23 +209,30 @@
   }
 
   /* Headline: a sheet being uncovered top-to-bottom, not a fade. Reserved for the one or two
-     headlines per page that should feel like the moment, not the background hum. */
-  .js .reveal-wipe {
+     headlines per page that should feel like the moment, not the background hum.
+     The clip-path lives on the inner `.reveal-wipe-surface` span, not on `.reveal-wipe` itself —
+     `.reveal-wipe` is the element RevealObserver watches, and a clip-path that starts an element
+     clipped to zero area makes IntersectionObserver report it as never intersecting, so it can
+     never earn the `.is-visible` class that would reveal it. Keeping the observed element
+     unclipped and clipping only its inner surface avoids that deadlock. See Reveal.tsx. */
+  .js .reveal-wipe > .reveal-wipe-surface {
     clip-path: inset(0 0 100% 0);
     transition: clip-path 0.85s var(--ease-draft);
     transition-delay: var(--reveal-delay, 0ms);
   }
-  .js .reveal-wipe.is-visible {
+  .js .reveal-wipe.is-visible > .reveal-wipe-surface {
     clip-path: inset(0 0 0 0);
   }
 
-  /* Big stat figures: revealed left-to-right, like a measurement being drawn, not faded in. */
-  .js .reveal-measure {
+  /* Big stat figures: revealed left-to-right, like a measurement being drawn, not faded in.
+     Same reason as `.reveal-wipe` above: the clip-path lives on the inner surface, not on the
+     observed `.reveal-measure` element itself. */
+  .js .reveal-measure > .reveal-measure-surface {
     clip-path: inset(0 100% 0 0);
     transition: clip-path 0.9s var(--ease-draft);
     transition-delay: var(--reveal-delay, 0ms);
   }
-  .js .reveal-measure.is-visible {
+  .js .reveal-measure.is-visible > .reveal-measure-surface {
     clip-path: inset(0 0 0 0);
   }
 
