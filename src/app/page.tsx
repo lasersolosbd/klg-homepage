@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ButtonLink } from "@/components/Buttons";
+import { CountUp } from "@/components/CountUp";
 import { ArcSweep, CornerMarks, Crosshair, Dimension, Pivot, Scale, SheetLabel, TickRule } from "@/components/Drafting";
 import { JsonLd } from "@/components/JsonLd";
 import { Reveal } from "@/components/Reveal";
@@ -143,7 +144,9 @@ export default function HomePage() {
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
           <div className="blueprint-grid-light grid-fade absolute inset-0" />
           <div className="absolute inset-y-0 right-0 w-2/3 bg-[radial-gradient(ellipse_at_100%_100%,rgba(212,154,61,0.16),transparent_60%)]" />
-          <ArcSweep className="absolute -bottom-10 -right-10 h-[115%] w-auto max-w-none text-gold" strokeOpacity={0.32} />
+          {/* Traced on like a pen drawing the protractor, not faded in whole — the one place on
+              the page where the compass motif gets to be the animation, not just the texture. */}
+          <ArcSweep className="reveal-draw absolute -bottom-10 -right-10 h-[115%] w-auto max-w-none text-gold" strokeOpacity={0.32} />
         </div>
 
         <Container className="relative pb-24 pt-14 sm:pt-20 lg:pb-32 lg:pt-24">
@@ -153,7 +156,9 @@ export default function HomePage() {
             </SheetLabel>
           </Reveal>
 
-          <Reveal delay={80}>
+          {/* The one headline on the site that gets the sheet-wipe treatment — reserved for the
+              actual first-impression moment, not applied uniformly everywhere. */}
+          <Reveal delay={80} variant="reveal-wipe">
             <h1 className="mt-10 max-w-[13.5ch] text-[clamp(2.9rem,7.6vw,6.6rem)] font-semibold leading-[0.98] text-white">
               Somebody just asked an AI which nonprofit to support. Did it say{" "}
               <em className="italic text-gold">your name?</em>
@@ -180,13 +185,14 @@ export default function HomePage() {
               </p>
             </Reveal>
 
-            {/* The stat is a measurement on the sheet, not a card. */}
-            <Reveal delay={240} as="figure" className="lg:col-span-5 lg:col-start-8">
+            {/* The stat is a measurement being taken, not a card fading in — it counts up once,
+                the way a reading settles on an instrument, and the number itself wipes on. */}
+            <Reveal delay={240} as="figure" variant="reveal-measure" className="lg:col-span-5 lg:col-start-8">
               <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-gold">
                 <Crosshair size={12} /> The sector, this month
               </p>
               <p className="mt-3 font-display text-[clamp(6rem,12vw,10.5rem)] font-semibold leading-[0.9] text-white">
-                98<span className="align-top text-[0.5em] leading-none text-gold">%</span>
+                <CountUp value={98} suffix="" /><span className="align-top text-[0.5em] leading-none text-gold">%</span>
               </p>
               <Dimension className="mt-3 text-gold" align="left">
                 of nonprofits already use AI
@@ -215,7 +221,13 @@ export default function HomePage() {
             <Reveal delay={320}>
               <div className="border border-vellum bg-white text-navy shadow-sheet">
                 <TickRule className="text-navy/30" />
-                <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 px-5 py-4 text-[14px] font-semibold" aria-label="AI tools we check">
+                {/* Each chip steps in on its own short beat instead of the whole strip fading in
+                    as one block — cheap, fast (40ms apart), the kind of motion you feel more
+                    than see. */}
+                <ul
+                  className="reveal-stagger flex flex-wrap items-center gap-x-6 gap-y-2 px-5 py-4 text-[14px] font-semibold"
+                  aria-label="AI tools we check"
+                >
                   <li className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-gold-text">
                     <Crosshair size={12} /> We check
                   </li>
@@ -253,13 +265,13 @@ export default function HomePage() {
               />
             </Reveal>
 
-            <Reveal delay={120} as="figure" className="lg:col-span-6">
+            <Reveal delay={120} as="figure" variant="reveal-measure" className="lg:col-span-6">
               <div className="bleed-right relative border-y border-l border-vellum bg-white py-10 pl-7 pr-5 sm:pl-10 lg:py-14 lg:pl-14 lg:pr-20">
                 <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-gold-text">
                   <Crosshair size={12} /> Measured
                 </p>
                 <p className="mt-4 font-display text-[clamp(5rem,10vw,9rem)] font-semibold leading-[0.9] text-navy">
-                  ~37
+                  <CountUp value={37} prefix="~" />
                   <span className="align-top text-[0.5em] text-gold-deep">%</span>
                 </p>
                 <Dimension className="mt-4 max-w-md text-navy/70" align="left">

@@ -10,9 +10,10 @@ export function RevealObserver() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const nodes = Array.from(
-      document.querySelectorAll<HTMLElement>(".reveal:not(.is-visible), .reveal-line:not(.is-visible)"),
-    );
+    const selector = [".reveal", ".reveal-line", ".reveal-wipe", ".reveal-measure", ".reveal-draw", ".reveal-stagger"]
+      .map((c) => `${c}:not(.is-visible)`)
+      .join(", ");
+    const nodes = Array.from(document.querySelectorAll<HTMLElement>(selector));
     if (nodes.length === 0) return;
 
     if (typeof IntersectionObserver === "undefined") {
@@ -39,19 +40,25 @@ export function RevealObserver() {
 }
 
 // Convenience wrapper: <Reveal delay={120}>…</Reveal>
+// `variant` picks the entrance technique — default "reveal" is the ordinary fade-up used for
+// body copy throughout the site. The others are reserved for the handful of moments per page
+// that should feel deliberate rather than ambient: a headline sheet-wipe, a stat drawn on like a
+// measurement, a compass/arc traced like a pen stroke, or a short stagger for a list of chips.
 export function Reveal({
   children,
   delay = 0,
   className = "",
   as: Tag = "div",
+  variant = "reveal",
 }: {
   children: React.ReactNode;
   delay?: number;
   className?: string;
   as?: "div" | "section" | "article" | "li" | "figure" | "span";
+  variant?: "reveal" | "reveal-wipe" | "reveal-measure" | "reveal-draw" | "reveal-stagger";
 }) {
   return (
-    <Tag className={`reveal ${className}`} style={{ "--reveal-delay": `${delay}ms` } as React.CSSProperties}>
+    <Tag className={`${variant} ${className}`} style={{ "--reveal-delay": `${delay}ms` } as React.CSSProperties}>
       {children}
     </Tag>
   );
