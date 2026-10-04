@@ -1,0 +1,51 @@
+# Third-party skills
+
+The skills in this directory (emil-design-eng, animate, review-animations,
+improve-animations, find-animation-opportunities, animation-vocabulary,
+apple-design, pick-ui-library, mobile-native, prototype) are copied from:
+
+https://github.com/emilkowalski/skills
+
+by Emil Kowalski (design engineer, ex-Vercel/Linear, creator of Sonner and
+Vaul). MIT License — copyright notice preserved below.
+
+Not copied (not relevant to this project): animate-expo (React Native/Expo),
+write-swift (Swift), ask-sonner (specific to the Sonner toast library, not
+used here).
+
+---
+
+MIT License
+
+Copyright (c) 2026 Emil Kowalski
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+Also added (Mark, Sept 29 2026, "most popular" skills for avoiding generic
+AI design output, per skills.sh install counts):
+
+- frontend-design/ — from https://github.com/anthropics/skills (Anthropic's
+  own official skills repo). 936K installs on skills.sh, the most-installed
+  design-related skill there. Apache 2.0 / license in LICENSE.txt.
+- design-taste-frontend/ — from https://github.com/leonxlnx/taste-skill
+  (skill file: skills/taste-skill/SKILL.md upstream). 538K installs on
+  skills.sh, the most popular of several "taste skill" repos found —
+  license per that repo, see https://github.com/leonxlnx/taste-skill.
