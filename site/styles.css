@@ -359,3 +359,13 @@ input[type="range"]::-moz-range-thumb { width: 1.2rem; height: 1.2rem; border-ra
 .btn-ghost-dark:hover { border-color: var(--brass); color: var(--brass); }
 .services .more { display: inline-flex; margin-top: .9rem; color: var(--brass-deep); font-weight: 600; text-underline-offset: 4px; }
 .cta .hero-cta { gap: 1rem 1.25rem; }
+
+/* logo seal: the full circular mark, never cropped */
+.seal { display: block; border-radius: 50%; background: #fff; flex: none; box-shadow: 0 0 0 1.5px rgb(210 171 98 / .75), 0 6px 18px -6px rgb(0 0 0 / .6); }
+.brand .seal { width: 2.75rem; height: 2.75rem; }
+.seal-lg { width: min(20rem, 70vw); height: auto; aspect-ratio: 1; box-shadow: 0 0 0 2px rgb(210 171 98 / .8), 0 0 0 14px rgb(210 171 98 / .12), 0 40px 70px -30px rgb(0 0 0 / .8); justify-self: center; }
+.cta-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
+.foot-brand { display: inline-flex; align-items: center; gap: .85rem; }
+.foot-brand .seal { width: 2.5rem; height: 2.5rem; }
+@media (max-width: 62rem) { .cta-grid { grid-template-columns: minmax(0, 1fr); } .seal-lg { justify-self: start; width: min(14rem, 60vw); } }
+@media (max-width: 62rem) { .seal-lg { margin-left: 8px; box-shadow: 0 0 0 2px rgb(210 171 98 / .8), 0 0 0 8px rgb(210 171 98 / .12), 0 30px 50px -26px rgb(0 0 0 / .8); } }
