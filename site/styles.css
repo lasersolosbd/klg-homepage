@@ -333,7 +333,7 @@ input[type="range"]::-moz-range-thumb { width: 1.2rem; height: 1.2rem; border-ra
 
 @media (max-width: 62rem) {
   .voice-grid, .calc-grid { grid-template-columns: minmax(0, 1fr); }
-  .hero::after { background: linear-gradient(180deg, rgb(12 38 35 / .88), rgb(12 38 35 / .55)); }
+  .hero::after { background: linear-gradient(180deg, rgb(12 38 35 / .9) 0%, rgb(12 38 35 / .72) 55%, rgb(12 38 35 / .35) 100%); }
   .pipe { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .pipe::before { left: 2.1rem; right: auto; top: 2rem; bottom: 2rem; width: 1px; height: auto; }
   .pipe li { grid-template-columns: 4.25rem 1fr; text-align: left; justify-items: start; column-gap: 1.25rem; align-items: center; padding-block: .9rem; }
@@ -348,3 +348,13 @@ input[type="range"]::-moz-range-thumb { width: 1.2rem; height: 1.2rem; border-ra
 }
 @media (prefers-reduced-motion: reduce) { .pipe .node { animation: none; } .wave i { transition: none; } }
 .calc .lede { margin-top: 1.5rem; }
+
+/* 3D hero: the WebGL canvas replaces the 2D one when it boots */
+.hero.gl-on #net { display: none; }
+.net.gl { opacity: 0; animation: glin 1.6s var(--ease) .1s forwards; }
+@keyframes glin { to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .net.gl { animation: none; opacity: 1; } }
+.btn-ghost-dark { color: var(--stone-50); border-color: rgb(246 248 244 / .38); }
+.btn-ghost-dark:hover { border-color: var(--brass); color: var(--brass); }
+.services .more { display: inline-flex; margin-top: .9rem; color: var(--brass-deep); font-weight: 600; text-underline-offset: 4px; }
+.cta .hero-cta { gap: 1rem 1.25rem; }

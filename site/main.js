@@ -106,6 +106,7 @@
   function start() { if (running || reduce || !visible || document.hidden) return; running = true; last = 0; requestAnimationFrame(loop); }
   function stop() { running = false; }
   size(); draw(0);
+  window.addEventListener('klg:gl', function () { stop(); reduce = true; });
   if (reduce) return;
   hero.addEventListener('pointermove', function (e) { var r = hero.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.on = e.pointerType !== 'touch'; });
   hero.addEventListener('pointerleave', function () { mouse.on = false; });
