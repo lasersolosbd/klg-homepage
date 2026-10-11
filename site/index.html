@@ -50,6 +50,7 @@
     </a>
     <nav class="nav" aria-label="Primary">
       <a href="#work">What we build</a>
+      <a href="#voice">Hear it</a>
       <a href="#process">How it starts</a>
       <a href="#about">Who&rsquo;s behind it</a>
       <a href="#faq">Questions</a>
@@ -63,6 +64,7 @@
 
 <!-- HERO -->
 <section class="hero">
+  <canvas class="net" id="net" aria-hidden="true"></canvas>
   <div class="wrap hero-grid">
     <div>
       <h1 class="reveal" style="--i:0">Your team should spend Tuesday <em>with donors</em>, not spreadsheets.</h1>
@@ -73,19 +75,6 @@
         </a>
         <a class="link-arrow" href="#work">See what we build</a>
       </div>
-    </div>
-    <div class="hero-art reveal" style="--i:3" aria-hidden="true">
-      <svg viewBox="0 0 400 400">
-        <path class="arc arc-soft" style="--i:0" pathLength="1" d="M200 10V390"/>
-        <path class="arc arc-soft" style="--i:1" pathLength="1" d="M10 200H390"/>
-        <path class="arc" style="--i:2" pathLength="1" d="M20 200A180 180 0 0 1 380 200"/>
-        <path class="arc" style="--i:3" pathLength="1" d="M340 200A140 140 0 0 1 60 200"/>
-        <path class="arc" style="--i:4" pathLength="1" d="M100 200A100 100 0 0 1 200 100"/>
-        <path class="arc" style="--i:5" pathLength="1" d="M200 260A60 60 0 0 0 260 200"/>
-        <circle class="dot" cx="200" cy="200" r="5"/>
-        <circle class="dot" cx="380" cy="200" r="3.5"/>
-        <circle class="dot" cx="60" cy="200" r="3.5"/>
-      </svg>
     </div>
   </div>
   <div class="hero-foot">
@@ -159,6 +148,56 @@
   </div>
 </section>
 
+
+<!-- VOICE DEMO -->
+<section class="section on-conifer voice" id="voice">
+  <div class="wrap voice-grid">
+    <div>
+      <h2 class="reveal">Hear what your phone line <em>could sound like.</em></h2>
+      <p class="lede reveal">A donor calls at 9 p.m. wanting to give in honor of her mother. Press play to hear how a voice agent handles it, and where it hands off to your team.</p>
+      <div class="voice-controls reveal">
+        <button class="btn btn-brass" id="voicePlay" type="button" aria-pressed="false">
+          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M6 4l10 6-10 6z"/></svg>
+          <span>Play the example call</span>
+        </button>
+        <span class="fine" id="voiceNote">Uses your device&rsquo;s built-in voices. Sound on.</span>
+      </div>
+      <p class="fine reveal">A scripted example for a fictional organization, not a recording of a real call.</p>
+    </div>
+    <div class="call reveal" role="region" aria-label="Example call transcript">
+      <div class="call-head">
+        <span class="call-status"><i aria-hidden="true"></i><b id="callState">Ready</b></span>
+        <div class="wave" id="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <ol class="transcript" id="transcript">
+        <li data-who="agent"><b>Assistant</b><span>Thank you for calling Riverside Community Alliance. This is the after-hours assistant. How can I help?</span></li>
+        <li data-who="caller"><b>Caller</b><span>Hi. I&rsquo;d like to make a gift in honor of my mother, and I&rsquo;m not sure how to do it over the phone.</span></li>
+        <li data-who="agent"><b>Assistant</b><span>I&rsquo;m so sorry for your loss, and thank you. I can take that gift now, or text you a secure link. Which would you prefer?</span></li>
+        <li data-who="caller"><b>Caller</b><span>A text link, please.</span></li>
+        <li data-who="agent"><b>Assistant</b><span>Sent. I&rsquo;ve also asked our donor relations team to call you personally tomorrow morning.</span></li>
+      </ol>
+      <div class="handoff" id="handoff"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="7" r="3"/><path d="M4 17c.8-3 3.2-4.5 6-4.5s5.2 1.500 6 4.500"/></svg>Handed to a person: follow-up flagged for 9:00 a.m.</div>
+    </div>
+  </div>
+</section>
+
+<!-- AUTOMATION FLOW -->
+<section class="section on-stone flow" id="flow">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="reveal">Automation, with a person <em>in the loop.</em></h2>
+      <p class="reveal">This is what a good automation looks like: fast where speed helps, and always passing through a human before anything is sent in your name.</p>
+    </div>
+    <ol class="pipe" aria-label="Example: automated gift acknowledgment">
+      <li style="--i:0"><span class="node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.600A4 4 0 0 1 19 10c0 5.600-7 10-7 10z"/></svg></span><h3>A gift arrives</h3><p>From your donation page, a check batch or your CRM.</p></li>
+      <li style="--i:1"><span class="node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg></span><h3>A thank-you is drafted</h3><p>In your voice, with the donor&rsquo;s history in mind.</p></li>
+      <li class="human" style="--i:2"><span class="node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.500"/><path d="M5 20c.9-3.600 3.700-5.500 7-5.500s6.100 1.900 7 5.500"/></svg></span><h3>A person reviews</h3><p>One click to approve, edit or hold.</p></li>
+      <li style="--i:3"><span class="node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L10 14M21 3l-7 18-4-7-7-4z"/></svg></span><h3>It goes out</h3><p>Under your name, usually the same day.</p></li>
+      <li style="--i:4"><span class="node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></span><h3>Your records update</h3><p>Receipt logged, next step scheduled.</p></li>
+    </ol>
+  </div>
+</section>
+
 <!-- FEATURE: RAPPORTRADAR -->
 <section class="section on-conifer-mid feature" id="major-gifts">
   <div class="wrap feature-grid">
@@ -183,7 +222,7 @@
 </section>
 
 <!-- PROCESS -->
-<section class="section on-stone" id="process">
+<section class="section on-stone-alt" id="process">
   <div class="wrap">
     <div class="section-head">
       <h2 class="reveal">How an engagement starts.</h2>
@@ -230,8 +269,33 @@
   </div>
 </section>
 
+
+<!-- CALCULATOR -->
+<section class="section on-stone calc" id="hours">
+  <div class="wrap calc-grid">
+    <div>
+      <h2 class="reveal">What are your team&rsquo;s hours worth?</h2>
+      <p class="lede reveal" style="color:var(--ink-soft)">Use your own numbers. Be conservative; we&rsquo;d rather under-promise.</p>
+    </div>
+    <form class="calc-form reveal" id="calc" onsubmit="return false">
+      <div class="field"><label for="c-staff">People doing repetitive admin work <output for="c-staff" id="o-staff">6</output></label><input id="c-staff" type="range" min="1" max="40" value="6"></div>
+      <div class="field"><label for="c-hours">Hours each, per week <output for="c-hours" id="o-hours">5</output></label><input id="c-hours" type="range" min="1" max="20" value="5"></div>
+      <div class="field"><label for="c-rate">Loaded cost per hour <output for="c-rate" id="o-rate">$35</output></label><input id="c-rate" type="range" min="15" max="120" step="5" value="35"></div>
+      <div class="field"><label for="c-pct">Share you think could be taken back <output for="c-pct" id="o-pct">30%</output></label><input id="c-pct" type="range" min="10" max="60" step="5" value="30"></div>
+      <div class="result" aria-live="polite">
+        <div><span class="big" id="r-hours">468</span><span class="unit">hours a year</span></div>
+        <div><span class="big" id="r-money">$16,380</span><span class="unit">in staff time, about <b id="r-weeks">12</b> work weeks</span></div>
+      </div>
+      <p class="fine">An estimate from your own inputs, not a promise. The first conversation is where we find which hours are real.</p>
+      <a class="btn btn-brass" href="#book">Find your hours
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+      </a>
+    </form>
+  </div>
+</section>
+
 <!-- FAQ -->
-<section class="section on-stone faq" id="faq">
+<section class="section on-stone-alt faq" id="faq">
   <div class="wrap faq-wrap">
     <h2 class="reveal">Questions leaders ask first.</h2>
     <div class="reveal">
