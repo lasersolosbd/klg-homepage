@@ -333,7 +333,8 @@ input[type="range"]::-moz-range-thumb { width: 1.2rem; height: 1.2rem; border-ra
 
 @media (max-width: 62rem) {
   .voice-grid, .calc-grid { grid-template-columns: minmax(0, 1fr); }
-  .hero::after { background: linear-gradient(180deg, rgb(12 38 35 / .9) 0%, rgb(12 38 35 / .72) 55%, rgb(12 38 35 / .35) 100%); }
+  .hero::after { background: linear-gradient(180deg, rgb(12 38 35 / 0) 0, rgb(12 38 35 / 0) 13rem, rgb(12 38 35 / .86) 21rem, rgb(12 38 35 / .9) 100%); }
+  .hero-grid { padding-top: 21rem; }
   .pipe { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .pipe::before { left: 2.1rem; right: auto; top: 2rem; bottom: 2rem; width: 1px; height: auto; }
   .pipe li { grid-template-columns: 4.25rem 1fr; text-align: left; justify-items: start; column-gap: 1.25rem; align-items: center; padding-block: .9rem; }

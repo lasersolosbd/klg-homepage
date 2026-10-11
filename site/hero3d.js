@@ -50,20 +50,20 @@
     /* ---------- shaders ---------- */
     function sh(type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; }
     function prog(vs, fs) { var p = gl.createProgram(); gl.attachShader(p, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(p); if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error('link'); return p; }
-    var common = 'uniform mat4 uMVP; uniform mediump float uTime; vec3 breathe(vec3 p, float s){ return p * (1.0 + 0.035 * sin(uTime * 0.9 + s * 25.0)); }';
+    var common = 'uniform mat4 uMVP; uniform mediump float uTime; uniform mediump float uDist; vec3 breathe(vec3 p, float s){ return p * (1.0 + 0.035 * sin(uTime * 0.9 + s * 25.0)); }';
     var pointsP, linesP;
     try {
       pointsP = prog(
         'attribute vec4 aPS; uniform float uSize; varying float vA; varying float vS;' + common +
         'void main(){ vec4 c = uMVP * vec4(breathe(aPS.xyz, aPS.w), 1.0); gl_Position = c;' +
-        'vA = smoothstep(5.0, 2.4, c.w); vS = aPS.w; gl_PointSize = uSize * (3.6 / c.w) * (0.7 + vS * vS * 2.4); }',
+        'vA = smoothstep(uDist + 1.0, uDist - 1.0, c.w); vS = aPS.w; gl_PointSize = uSize * (uDist / c.w) * (0.7 + vS * vS * 2.4); }',
         'precision mediump float; varying float vA; varying float vS;' +
         'void main(){ float d = length(gl_PointCoord - 0.5); if (d > 0.5) discard; float g = smoothstep(0.5, 0.0, d); float core = pow(g, 3.0);' +
         'vec3 col = mix(vec3(0.82, 0.67, 0.38), vec3(1.0, 0.93, 0.76), core); float a = (g * 0.55 + core * 0.6) * (0.35 + vA * 0.9);' +
         'gl_FragColor = vec4(col * a, a); }');
       linesP = prog(
         'attribute vec3 aPos; attribute vec4 aM; varying float vA; varying float vT; varying float vPh; varying float vPu;' + common +
-        'void main(){ vec4 c = uMVP * vec4(breathe(aPos, aM.x), 1.0); gl_Position = c; vA = smoothstep(5.2, 2.4, c.w); vT = aM.y; vPh = aM.z; vPu = aM.w; }',
+        'void main(){ vec4 c = uMVP * vec4(breathe(aPos, aM.x), 1.0); gl_Position = c; vA = smoothstep(uDist + 1.1, uDist - 1.0, c.w); vT = aM.y; vPh = aM.z; vPu = aM.w; }',
         'precision mediump float; uniform float uTime; varying float vA; varying float vT; varying float vPh; varying float vPu;' +
         'void main(){ float h = fract(uTime * 0.28 + vPh); float pulse = vPu * smoothstep(0.16, 0.0, abs(vT - h));' +
         'float a = (0.10 + pulse * 0.9) * (0.25 + vA * 0.95); vec3 col = mix(vec3(0.82, 0.67, 0.38), vec3(1.0, 0.94, 0.78), pulse);' +
@@ -73,8 +73,8 @@
     function buf(data) { var b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW); return b; }
     var ptBuf = buf(Pt), lnBuf = buf(L), lnCount = L.length / 7;
     var loc = {
-      aPS: gl.getAttribLocation(pointsP, 'aPS'), uMVPp: gl.getUniformLocation(pointsP, 'uMVP'), uTimep: gl.getUniformLocation(pointsP, 'uTime'), uSize: gl.getUniformLocation(pointsP, 'uSize'),
-      aPos: gl.getAttribLocation(linesP, 'aPos'), aM: gl.getAttribLocation(linesP, 'aM'), uMVPl: gl.getUniformLocation(linesP, 'uMVP'), uTimel: gl.getUniformLocation(linesP, 'uTime')
+      aPS: gl.getAttribLocation(pointsP, 'aPS'), uMVPp: gl.getUniformLocation(pointsP, 'uMVP'), uTimep: gl.getUniformLocation(pointsP, 'uTime'), uDistp: gl.getUniformLocation(pointsP, 'uDist'), uSize: gl.getUniformLocation(pointsP, 'uSize'),
+      aPos: gl.getAttribLocation(linesP, 'aPos'), aM: gl.getAttribLocation(linesP, 'aM'), uMVPl: gl.getUniformLocation(linesP, 'uMVP'), uTimel: gl.getUniformLocation(linesP, 'uTime'), uDistl: gl.getUniformLocation(linesP, 'uDist')
     };
 
     /* ---------- math ---------- */
@@ -91,15 +91,18 @@
       W = Math.max(1, r.width); H = Math.max(1, r.height); cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); gl.viewport(0, 0, cv.width, cv.height);
     }
     function render() {
-      var asp = W / H, fov = 0.61, dist = 4.3, ox = 0, oy = 0;
-      if (asp >= 1.15) { ox = 0.56; }                              // wide: sphere sits on the right
-      else { dist = Math.max(4.3, 1 / (0.92 * Math.tan(fov / 2) * asp)); oy = -0.28; ox = 0.0; } // tall: centred, smaller
+      var asp = W / H, fov = 0.61, th = Math.tan(fov / 2), dist, ox = 0, oy = 0, R;
+      if (asp >= 1.15) { dist = 4.3; ox = 0.56; R = (H / 2) / (dist * th); }          // wide: globe sits on the right
+      else {                                                                          // tall: globe sits in the clear space above the headline
+        var pad = parseFloat(getComputedStyle(hero.querySelector('.hero-grid')).paddingTop) || 260;
+        R = Math.min(W * 0.44, pad * 0.5); dist = (H / 2) / (R * th); oy = 1 - 2 * (pad * 0.52) / H;
+      }
       var mvp = mul(persp(fov, asp, .1, 30, ox, oy), mul(trans(-dist), mul(rotX(rx), rotY(ry))));
       gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE);
-      gl.useProgram(linesP); gl.uniformMatrix4fv(loc.uMVPl, false, mvp); gl.uniform1f(loc.uTimel, time);
+      gl.useProgram(linesP); gl.uniformMatrix4fv(loc.uMVPl, false, mvp); gl.uniform1f(loc.uTimel, time); gl.uniform1f(loc.uDistl, dist);
       gl.bindBuffer(gl.ARRAY_BUFFER, lnBuf); gl.enableVertexAttribArray(loc.aPos); gl.vertexAttribPointer(loc.aPos, 3, gl.FLOAT, false, 28, 0);
       gl.enableVertexAttribArray(loc.aM); gl.vertexAttribPointer(loc.aM, 4, gl.FLOAT, false, 28, 12); gl.drawArrays(gl.LINES, 0, lnCount);
-      gl.useProgram(pointsP); gl.uniformMatrix4fv(loc.uMVPp, false, mvp); gl.uniform1f(loc.uTimep, time); gl.uniform1f(loc.uSize, Math.min(11, Math.max(6, H / 95)) * dpr);
+      gl.useProgram(pointsP); gl.uniformMatrix4fv(loc.uMVPp, false, mvp); gl.uniform1f(loc.uTimep, time); gl.uniform1f(loc.uDistp, dist); gl.uniform1f(loc.uSize, Math.min(10, Math.max(4.5, R / 45)) * dpr);
       gl.bindBuffer(gl.ARRAY_BUFFER, ptBuf); gl.enableVertexAttribArray(loc.aPS); gl.vertexAttribPointer(loc.aPS, 4, gl.FLOAT, false, 16, 0); gl.disableVertexAttribArray(loc.aM);
       gl.drawArrays(gl.POINTS, 0, N);
     }
