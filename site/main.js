@@ -116,55 +116,44 @@
   start();
 })();
 
-// ---- Voice demo ----
+// ---- After-hours call: transcript, with audio only if recorded clips are provided ----
 (function () {
-  var btn = document.getElementById('voicePlay'); if (!btn) return;
-  var call = document.querySelector('.call'), items = [].slice.call(document.querySelectorAll('#transcript li'));
-  var bars = [].slice.call(document.querySelectorAll('#wave i')), state = document.getElementById('callState');
-  var note = document.getElementById('voiceNote'), label = btn.querySelector('span');
-  var synth = window.speechSynthesis, playing = false, token = 0, raf = 0, level = 0, who = 'agent';
+  var call = document.querySelector('.call'); if (!call) return;
+  var items = [].slice.call(document.querySelectorAll('#transcript li'));
+  var btn = document.getElementById('voicePlay'), controls = document.getElementById('voiceControls');
+  var clips = items.map(function (li) { return li.dataset.audio || ''; });
+  if (!btn || !clips.length || clips.some(function (c) { return !c; })) { call.classList.add('static'); items.forEach(function (li) { li.classList.add('done'); }); return; }
+  // Recorded clips present: reveal the player.
+  controls.hidden = false;
+  var bars = [].slice.call(document.querySelectorAll('#wave i')), state = document.getElementById('callState'), label = btn.querySelector('span');
+  var playing = false, token = 0, raf = 0, who = 'agent', audio = null;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!synth) note.textContent = 'Your browser can’t speak aloud, so the call will play as text.';
-
-  function voices() { var v = synth ? synth.getVoices().filter(function (x) { return /^en/i.test(x.lang); }) : []; return v; }
-  function pick(role) { var v = voices(); if (!v.length) return null; return role === 'agent' ? v[0] : (v[1] || v[0]); }
   function animate() {
     bars.forEach(function (b, i) {
-      var target = playing ? 4 + Math.abs(Math.sin(performance.now() / (120 + i * 9) + i)) * 26 * level : 4;
+      var target = playing && !reduce ? 4 + Math.abs(Math.sin(performance.now() / (120 + i * 9) + i)) * 26 : 4;
       b.style.height = target.toFixed(1) + 'px'; b.style.opacity = playing ? .9 : .5;
       b.style.background = who === 'agent' ? 'var(--brass)' : 'var(--mist)';
     });
     if (playing) raf = requestAnimationFrame(animate);
   }
-  function reset() { items.forEach(function (li) { li.classList.remove('on', 'done'); }); call.classList.remove('live', 'finished'); state.textContent = 'Ready'; bars.forEach(function (b) { b.style.height = '4px'; }); }
-  function finish(ok) { playing = false; level = 0; btn.setAttribute('aria-pressed', 'false'); label.textContent = ok ? 'Play it again' : 'Play the example call'; call.classList.remove('live'); if (ok) { call.classList.add('finished'); state.textContent = 'Call complete'; items.forEach(function (li) { li.classList.remove('on'); li.classList.add('done'); }); } else { reset(); } cancelAnimationFrame(raf); animate(); }
-  function speak(li, my) {
+  function reset() { items.forEach(function (li) { li.classList.remove('on', 'done'); }); call.classList.remove('live', 'finished'); state.textContent = 'Ready'; }
+  function finish(ok) { playing = false; btn.setAttribute('aria-pressed', 'false'); label.textContent = ok ? 'Play it again' : 'Play the example call'; call.classList.remove('live'); if (ok) { call.classList.add('finished'); state.textContent = 'Call complete'; items.forEach(function (li) { li.classList.remove('on'); li.classList.add('done'); }); } else { reset(); } cancelAnimationFrame(raf); animate(); }
+  function play(li) {
     return new Promise(function (res) {
-      var text = li.querySelector('span').textContent, done = false;
-      function end() { if (!done) { done = true; res(); } }
-      who = li.dataset.who; level = who === 'agent' ? 1 : .7;
-      if (!synth) { setTimeout(end, 1200 + text.length * 45); return; }
-      var u = new SpeechSynthesisUtterance(text); var v = pick(who); if (v) u.voice = v;
-      u.rate = who === 'agent' ? 1 : .96; u.pitch = who === 'agent' ? 1 : .8;
-      u.onend = end; u.onerror = end; synth.speak(u);
-      setTimeout(end, 2500 + text.length * 90); // safety net
+      who = li.dataset.who; audio = new Audio(li.dataset.audio);
+      audio.onended = res; audio.onerror = res; audio.play().catch(res);
     });
   }
   async function run() {
     var my = ++token; playing = true; reset(); call.classList.add('live'); state.textContent = 'Live'; btn.setAttribute('aria-pressed', 'true'); label.textContent = 'Stop'; animate();
     for (var i = 0; i < items.length; i++) {
       if (my !== token) return;
-      items[i].classList.add('on'); await speak(items[i], my);
+      items[i].classList.add('on'); await play(items[i]);
       if (my !== token) return; items[i].classList.remove('on'); items[i].classList.add('done'); await new Promise(function (r) { setTimeout(r, 380); });
     }
     if (my === token) finish(true);
   }
-  btn.addEventListener('click', function () {
-    if (playing) { token++; if (synth) synth.cancel(); finish(false); return; }
-    if (synth) { synth.cancel(); synth.getVoices(); }
-    run();
-  });
-  if (synth && synth.addEventListener) synth.addEventListener('voiceschanged', function () {});
+  btn.addEventListener('click', function () { if (playing) { token++; if (audio) audio.pause(); finish(false); return; } run(); });
 })();
 
 // ---- Hours calculator ----
