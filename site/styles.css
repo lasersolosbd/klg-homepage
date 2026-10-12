@@ -479,3 +479,5 @@ cite a { color: inherit; text-decoration: underline; text-underline-offset: 3px;
 .legal p, .legal li { line-height: 1.75; }
 .legal p + p { margin-top: 1rem; }
 .legal ul { list-style: disc; padding-left: 1.5rem; display: grid; gap: .5rem; margin-top: .5rem; }
+
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }

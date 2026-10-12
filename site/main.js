@@ -179,10 +179,10 @@
   update();
 })();
 
-// ---- Contact form (posts to the KLG Homepage Contact Form workflow; texting is opt-in only) ----
+// ---- Contact form (posts to /api/lead, which writes to GoHighLevel; texting is opt-in only) ----
 (function () {
   var f = document.getElementById('contactForm'); if (!f) return;
-  var ENDPOINT = 'https://solobusinessdude.app.n8n.cloud/webhook/klg-contact-form';
+  var ENDPOINT = '/api/lead';
   var btn = document.getElementById('cf-submit'), status = document.getElementById('cf-status');
   var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   function err(id, msg) { var el = document.getElementById('cf-' + id + '-err'), inp = document.getElementById('cf-' + id); if (el) el.textContent = msg || ''; if (inp) inp.setAttribute('aria-invalid', msg ? 'true' : 'false'); return !!msg; }
@@ -197,7 +197,7 @@
       err('phone', (svc || mkt) && !phone ? 'Add your mobile number to receive texts, or uncheck the text boxes.' : (phone && phone.replace(/\D/g, '').length < 10 ? 'Please include the area code, or leave this blank.' : ''))
     ];
     if (bad.some(Boolean)) { say(''); var first = f.querySelector('[aria-invalid="true"]'); if (first) first.focus(); return; }
-    var body = { name: v('name'), email: v('email'), organization: v('organization'), phone: phone, message: v('message'), sms_service: !!(svc && phone), sms_marketing: !!(mkt && phone) };
+    var body = { name: v('name'), email: v('email'), organization: v('organization'), phone: phone, message: v('message'), sms_service: !!(svc && phone), sms_marketing: !!(mkt && phone), hp: v('website') };
     btn.disabled = true; btn.textContent = 'Sending…'; say('');
     try {
       var res = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
