@@ -178,3 +178,33 @@
   ins.forEach(function (i) { i.addEventListener('input', update); });
   update();
 })();
+
+// ---- Contact form (posts to the KLG Homepage Contact Form workflow; texting is opt-in only) ----
+(function () {
+  var f = document.getElementById('contactForm'); if (!f) return;
+  var ENDPOINT = 'https://solobusinessdude.app.n8n.cloud/webhook/klg-contact-form';
+  var btn = document.getElementById('cf-submit'), status = document.getElementById('cf-status');
+  var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  function err(id, msg) { var el = document.getElementById('cf-' + id + '-err'), inp = document.getElementById('cf-' + id); if (el) el.textContent = msg || ''; if (inp) inp.setAttribute('aria-invalid', msg ? 'true' : 'false'); return !!msg; }
+  function say(msg, kind) { status.hidden = !msg; status.textContent = msg || ''; status.className = 'cf-status' + (kind ? ' ' + kind : ''); }
+  f.addEventListener('submit', async function (e) {
+    e.preventDefault(); if (btn.disabled) return;
+    var v = function (n) { return (f.elements[n].value || '').trim(); };
+    var svc = f.elements.sms_service.checked, mkt = f.elements.sms_marketing.checked, phone = v('phone');
+    var bad = [
+      err('name', v('name') ? '' : 'Please tell us your name.'),
+      err('email', !v('email') ? 'Please enter your email so we can reply.' : (EMAIL.test(v('email')) ? '' : 'That email doesn’t look right. Check for typos.')),
+      err('phone', (svc || mkt) && !phone ? 'Add your mobile number to receive texts, or uncheck the text boxes.' : (phone && phone.replace(/\D/g, '').length < 10 ? 'Please include the area code, or leave this blank.' : ''))
+    ];
+    if (bad.some(Boolean)) { say(''); var first = f.querySelector('[aria-invalid="true"]'); if (first) first.focus(); return; }
+    var body = { name: v('name'), email: v('email'), organization: v('organization'), phone: phone, message: v('message'), sms_service: !!(svc && phone), sms_marketing: !!(mkt && phone) };
+    btn.disabled = true; btn.textContent = 'Sending…'; say('');
+    try {
+      var res = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      if (!res.ok) throw new Error('bad status ' + res.status);
+      f.reset(); say('Thank you. We got your message and will reply within one business day.', 'ok'); btn.textContent = 'Sent';
+    } catch (x) {
+      say('Something went wrong sending your message. Please try again, or email hello@kindlogicgroup.com.', 'bad'); btn.disabled = false; btn.textContent = 'Send message';
+    }
+  });
+})();

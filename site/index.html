@@ -414,13 +414,39 @@
     <img class="seal seal-lg reveal" src="brand/klg-seal-360.webp" width="320" height="320" alt="Kind Logic Group seal: a navigator&rsquo;s compass and sextant" loading="lazy" decoding="async">
   </div>
 </section>
+<!-- CONTACT FORM -->
+<section class="section on-stone contact" id="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <h2 class="reveal">Or skip the call. <em>Write to us directly.</em></h2>
+      <p class="lede reveal" style="color:var(--ink-soft)">Name, email, what&rsquo;s on your mind. We reply by email within one business day, or by text if you&rsquo;d rather hear it there.</p>
+    </div>
+    <form class="contact-form reveal" id="contactForm" novalidate>
+      <div class="cf-field"><label for="cf-name">Your name</label><input id="cf-name" name="name" autocomplete="name" placeholder="Jamie Rivera" aria-describedby="cf-name-err"><p class="cf-err" id="cf-name-err" role="alert"></p></div>
+      <div class="cf-field"><label for="cf-email">Work email</label><input id="cf-email" name="email" type="email" autocomplete="email" placeholder="you@yournonprofit.org" aria-describedby="cf-email-err"><p class="cf-err" id="cf-email-err" role="alert"></p></div>
+      <div class="cf-field"><label for="cf-org">Organization name</label><input id="cf-org" name="organization" autocomplete="organization" placeholder="Northwest Habitat Trust"></div>
+      <div class="cf-field"><label for="cf-phone">Mobile phone <span>optional</span></label><input id="cf-phone" name="phone" type="tel" autocomplete="tel" placeholder="(555) 555-0123" aria-describedby="cf-phone-err"><p class="cf-err" id="cf-phone-err" role="alert"></p></div>
+      <div class="cf-field"><label for="cf-msg">What&rsquo;s on your mind? <span>optional</span></label><textarea id="cf-msg" name="message" rows="4"></textarea></div>
+      <p class="cf-status" id="cf-status" role="status" aria-live="polite" hidden></p>
+      <button class="btn btn-brass" id="cf-submit" type="submit">Send message</button>
+      <fieldset class="consent">
+        <legend class="sr-only">Optional text message consent</legend>
+        <p class="consent-lead">Text messages are optional. You can write to us without them.</p>
+        <label class="check"><input type="checkbox" name="sms_service"><span>I agree to receive text messages from Kind Logic Group about my inquiry, such as replies to my message and help scheduling a call, at the mobile number above. Message frequency varies. Message and data rates may apply. Reply STOP to cancel, HELP for help.</span></label>
+        <label class="check"><input type="checkbox" name="sms_marketing"><span>I agree to receive occasional promotional text messages from Kind Logic Group about AI services for nonprofits at the mobile number above. Message frequency varies. Message and data rates may apply. Reply STOP to cancel, HELP for help.</span></label>
+        <p class="consent-fine">Consent is not a condition of contacting us or buying anything. See our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms &amp; Conditions</a>. No mobile information is shared with third parties for marketing or promotional purposes.</p>
+      </fieldset>
+    </form>
+  </div>
+</section>
+
 </main>
 
 
 <footer class="site-footer">
   <div class="wrap">
     <span class="foot-brand"><img class="seal" src="brand/klg-seal-132.webp" width="40" height="40" alt="" loading="lazy" decoding="async">&copy; 2026 Kind Logic Group. More of every donor dollar pointed at the mission. Longmont, Colorado.</span>
-    <nav aria-label="Footer"><a href="#how-we-help">How we help</a><a href="#about">About</a><a href="#faq">Questions</a><a href="#book">Book</a></nav>
+    <nav aria-label="Footer"><a href="#how-we-help">How we help</a><a href="#about">About</a><a href="#faq">Questions</a><a href="#book">Book</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a></nav>
   </div>
 </footer>
 
