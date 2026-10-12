@@ -430,3 +430,16 @@ cite a { color: inherit; text-decoration: underline; text-underline-offset: 3px;
 
 @media (max-width: 62rem) { .why-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 40rem) { .stat { grid-template-columns: minmax(0, 1fr); gap: .75rem; } .triple { grid-template-columns: minmax(0, 1fr); } .mid-cta .btn { width: 100%; } }
+
+/* founder photos */
+.founder-grid { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; }
+.founder h2 { font-size: var(--step-4); max-width: 11em; }
+.founder .story p:first-child { margin-top: 1.75rem; }
+.inline-link { color: var(--brass); font-weight: 600; text-underline-offset: 3px; }
+.photos { position: relative; max-width: 28rem; margin-inline: auto; padding-bottom: 3rem; width: 100%; }
+.polaroid { margin: 0; background: var(--stone-50); padding: .7rem .7rem 1rem; border-radius: 3px; box-shadow: 0 30px 50px -28px rgb(0 0 0 / .85); color: var(--ink-soft); }
+.polaroid img { width: 100%; height: auto; display: block; }
+.polaroid figcaption { margin-top: .6rem; font-family: var(--serif); font-style: italic; font-size: 1rem; }
+.polaroid.p1 { width: 78%; transform: rotate(-2deg); position: relative; z-index: 1; }
+.polaroid.p2 { width: 58%; position: absolute; right: 0; bottom: 0; transform: rotate(3deg); z-index: 2; }
+@media (max-width: 62rem) { .founder-grid { grid-template-columns: minmax(0, 1fr); } .photos { max-width: 24rem; } }
