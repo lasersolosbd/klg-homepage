@@ -42,7 +42,7 @@ module.exports = async function handler(req, res) {
     customFields.push({ id: FIELD.smsConsentVersion, field_value: CONSENT_VERSION });
   }
 
-  const payload = { locationId: LOCATION_ID, name, email, source: 'KLG Website Contact Form', tags, customFields };
+  const payload = { locationId: LOCATION_ID, name, email, source: 'KLG Website Contact Form', customFields };
   if (phone) payload.phone = phone;
   if (organization) payload.companyName = organization;
 
@@ -53,6 +53,17 @@ module.exports = async function handler(req, res) {
       body: JSON.stringify(payload),
     });
     if (!r.ok) { console.error('lead: GHL responded', r.status, (await r.text()).slice(0, 500)); return res.status(502).json({ ok: false, error: 'upstream_error' }); }
+    const data = await r.json().catch(() => ({}));
+    const contactId = data && data.contact && data.contact.id;
+    if (!contactId) { console.error('lead: no contact id in GHL response'); return res.status(502).json({ ok: false, error: 'upstream_error' }); }
+    // Tags are added separately: the upsert endpoint's `tags` field OVERWRITES existing tags,
+    // which would wipe earlier consent/source tags if the same person submits again or on the other site.
+    const t = await fetch('https://services.leadconnectorhq.com/contacts/' + encodeURIComponent(contactId) + '/tags', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token, Version: '2021-07-28', 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ tags }),
+    });
+    if (!t.ok) { console.error('lead: GHL add-tags responded', t.status, (await t.text()).slice(0, 500)); return res.status(502).json({ ok: false, error: 'upstream_error' }); }
     return res.status(200).json({ ok: true });
   } catch (e) {
     console.error('lead: GHL request failed', e && e.message);
