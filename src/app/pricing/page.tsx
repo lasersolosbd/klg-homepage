@@ -7,6 +7,7 @@ import { LastUpdated } from "@/components/LastUpdated";
 import { Reveal } from "@/components/Reveal";
 import { Container } from "@/components/Section";
 import {
+  AEO_EXTRA_LOCATION_PRICE_PER_MONTH,
   AEO_PRICE_PER_MONTH,
   AI_ENGINES,
   BOOKING_URL,
@@ -16,7 +17,7 @@ import {
 import { webPageSchema } from "@/lib/schema";
 
 const TITLE = `Pricing: ${AEO_PRICE_PER_MONTH}/month AI visibility for nonprofits, policy course scoped per organization`;
-const DESCRIPTION = `One flat price for the AI visibility service (${AEO_PRICE_PER_MONTH} a month, free first report). The AI policy course is scoped per organization. AI assistants are on the roadmap. No tiers, no seats.`;
+const DESCRIPTION = `One flat price for the AI visibility service (${AEO_PRICE_PER_MONTH} a month for your first location, ${AEO_EXTRA_LOCATION_PRICE_PER_MONTH} a month for each additional location, free first report). No setup fees or hidden fees. The AI policy course is scoped per organization. AI assistants are on the roadmap.`;
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -29,6 +30,10 @@ const faq = [
   {
     q: "Why is the visibility service one flat price?",
     a: "Because the work is the same whether you're a small shop or a large one. The AI tools don't care about your budget, and neither does the check.",
+  },
+  {
+    q: "What if we have more than one location?",
+    a: `The ${AEO_PRICE_PER_MONTH} a month covers your first location. Each additional location is ${AEO_EXTRA_LOCATION_PRICE_PER_MONTH} a month, because we run the checks for each location separately and give you fixes for each market. There are no setup fees and no hidden fees.`,
   },
   {
     q: "Is there a contract?",
@@ -56,7 +61,7 @@ export default function PricingPage() {
                 One real number. Two honest &ldquo;ask us.&rdquo;
               </h1>
               <p className="mt-7 max-w-xl text-lg leading-8 text-slate">
-                We only publish a price when it&rsquo;s the same for everyone. Right now that&rsquo;s
+                We only publish a price when it&rsquo;s the same for every organization. Right now that&rsquo;s
                 one service. The others are scoped with you before any work starts, and you&rsquo;ll
                 have it in writing.
               </p>
@@ -69,10 +74,14 @@ export default function PricingPage() {
                 {AEO_PRICE_PER_MONTH}
               </p>
               <Dimension className="mt-4 text-navy/70" align="left">
-                per month, flat, same for everyone
+                per month for your first location, flat
               </Dimension>
               <p className="mt-4 text-[15px] leading-7 text-slate">
-                Free first report. Month to month. No tiers, no seats, no surprise line items.
+                More than one location? Each additional location is {AEO_EXTRA_LOCATION_PRICE_PER_MONTH}
+                {" "}per month.
+              </p>
+              <p className="mt-2 text-[15px] leading-7 text-slate">
+                Free first report. Month to month. No setup fees, no hidden fees, no extra charges.
               </p>
             </Reveal>
           </div>
@@ -93,7 +102,10 @@ export default function PricingPage() {
               <h2 className="mt-4 text-[28px] font-semibold leading-tight">AI visibility</h2>
               <p className="mt-3 flex items-baseline gap-2">
                 <span className="font-display text-[44px] font-semibold leading-none text-navy">{AEO_PRICE_PER_MONTH}</span>
-                <span className="text-sm font-semibold text-slate">/ month</span>
+                <span className="text-sm font-semibold text-slate">/ month, first location</span>
+              </p>
+              <p className="mt-2 text-sm font-semibold text-navy">
+                Each additional location: {AEO_EXTRA_LOCATION_PRICE_PER_MONTH}/month. No setup fees.
               </p>
               <ol className="mt-7 space-y-3 border-t border-navy/15 pt-6 text-[15px] leading-7 text-ink">
                 {[

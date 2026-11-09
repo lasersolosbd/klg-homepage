@@ -31,10 +31,14 @@ export const CONTACT_FORM_URL =
 // The one real price on the site. Everything else is "contact us" until Mark sets numbers.
 export const AEO_PRICE_PER_MONTH = "$579";
 
+// The $579 covers one location. Every additional location adds this flat amount per month.
+// Anywhere the site shows the $579, it must also say this (decided by Mark, 2026-11-08).
+export const AEO_EXTRA_LOCATION_PRICE_PER_MONTH = "$49";
+
 // Freshness signal. Bump this whenever page copy changes; it feeds the visible "Last updated"
 // line, the article:modified_time meta tag and dateModified in JSON-LD (all three are what the
 // AEO readiness check reads).
-export const LAST_UPDATED = "2026-09-30";
+export const LAST_UPDATED = "2026-11-08";
 export const LAST_UPDATED_LABEL = "September 30, 2026";
 
 // Location and service area, written in plain text on the site (readiness check: location visible).

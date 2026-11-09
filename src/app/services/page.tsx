@@ -7,6 +7,7 @@ import { LastUpdated } from "@/components/LastUpdated";
 import { Reveal } from "@/components/Reveal";
 import { Cite, Container } from "@/components/Section";
 import {
+  AEO_EXTRA_LOCATION_PRICE_PER_MONTH,
   AEO_PRICE_PER_MONTH,
   AI_ENGINES,
   BOOKING_URL,
@@ -17,7 +18,7 @@ import { webPageSchema } from "@/lib/schema";
 import { STATS } from "@/lib/stats";
 
 const TITLE = "How we help: AI visibility, AI policy, and AI assistants for nonprofits";
-const DESCRIPTION = `Three services nonprofits actually run: a ${AEO_PRICE_PER_MONTH}/month AI visibility report across ${AI_ENGINES.length} AI tools, a guided AI use policy course for executive teams and boards, and AI assistants for staff (coming soon).`;
+const DESCRIPTION = `Three services nonprofits actually run: a ${AEO_PRICE_PER_MONTH}/month AI visibility report across ${AI_ENGINES.length} AI tools (${AEO_EXTRA_LOCATION_PRICE_PER_MONTH}/month per additional location), a guided AI use policy course for executive teams and boards, and AI assistants for staff (coming soon).`;
 
 export const metadata: Metadata = {
   title: "How we help",
@@ -201,7 +202,7 @@ export default function ServicesPage() {
           kicker="Start here"
           tone="gold"
           title="AI visibility for your organization"
-          price={`${AEO_PRICE_PER_MONTH} per month, flat. Free first report.`}
+          price={`${AEO_PRICE_PER_MONTH} per month for your first location, flat. ${AEO_EXTRA_LOCATION_PRICE_PER_MONTH} per month for each additional location. No setup fees. Free first report.`}
           intro={
             <>
               <p>
@@ -296,7 +297,7 @@ export default function ServicesPage() {
           kicker="The monthly habit"
           tone="navy"
           title="Keep the visibility going"
-          price={`Included in the ${AEO_PRICE_PER_MONTH} per month.`}
+          price={`Included in the ${AEO_PRICE_PER_MONTH} per month (${AEO_EXTRA_LOCATION_PRICE_PER_MONTH} per month for each additional location).`}
           intro={
             <>
               <p>
@@ -315,7 +316,7 @@ export default function ServicesPage() {
             "The same report, every month, with what changed highlighted",
             "A running history so the board can see the trend, not just a snapshot",
             "Priority order that always starts with whatever is blocking AI tools outright",
-            "One flat price. Cancel when you like.",
+            "One flat price per location, no setup fees. Cancel when you like.",
           ]}
           who="Organizations that have run the free report and want the fixes made and kept made, without adding it to anyone's job description."
           first="Start with the free report. If you subscribe, the first month's to-do list is usually the longest; it gets shorter from there."

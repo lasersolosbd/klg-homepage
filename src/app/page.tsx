@@ -9,6 +9,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { Reveal } from "@/components/Reveal";
 import { Cite, Container, SectionHeading } from "@/components/Section";
 import {
+  AEO_EXTRA_LOCATION_PRICE_PER_MONTH,
   AEO_PRICE_PER_MONTH,
   AI_ENGINES,
   BOOKING_URL,
@@ -27,7 +28,7 @@ const ladder = [
     step: "01",
     name: "AI visibility",
     kicker: "Start here",
-    price: `${AEO_PRICE_PER_MONTH}/month, flat`,
+    price: `${AEO_PRICE_PER_MONTH}/month for your first location, flat. ${AEO_EXTRA_LOCATION_PRICE_PER_MONTH}/month per additional location.`,
     body: `Every month we ask ${AI_ENGINES.length} AI tools the questions your donors and clients ask, in your city, about your cause. You get a plain-English report of what they said, who they named instead of you, and the short list of fixes that would change that. Then we help you make the fixes.`,
     cta: { label: "See your score, free", href: FREE_REPORT_URL },
     tone: "gold",
@@ -54,7 +55,7 @@ const ladder = [
     step: "04",
     name: "Keep the visibility going",
     kicker: "The monthly habit",
-    price: `Included in the ${AEO_PRICE_PER_MONTH}/month`,
+    price: `Included in the ${AEO_PRICE_PER_MONTH}/month (${AEO_EXTRA_LOCATION_PRICE_PER_MONTH}/month per additional location)`,
     body: "AI answers change every week. Something you fixed in March can quietly slide by August because a competitor published a better page. The visibility service is not a one-time audit. It is the monthly check that catches the slide, with a to-do list short enough to actually get done.",
     cta: { label: "How the monthly report works", href: "/services#visibility" },
     tone: "navy",
@@ -100,7 +101,7 @@ const principles = [
   },
   {
     t: "One flat price on the thing we can price.",
-    b: `The visibility service is ${AEO_PRICE_PER_MONTH} a month, same for everyone. No tiers, no seats, no surprise line items. The rest is scoped with you, in writing, before any work starts.`,
+    b: `The visibility service is ${AEO_PRICE_PER_MONTH} a month for your first location, and ${AEO_EXTRA_LOCATION_PRICE_PER_MONTH} a month for each additional location. No setup fees, no hidden fees, no surprise line items. The rest is scoped with you, in writing, before any work starts.`,
   },
   {
     t: "A plan people actually follow.",
